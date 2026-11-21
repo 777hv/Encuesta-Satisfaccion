@@ -1,0 +1,10 @@
+@api = http://localhost:5080
+
+GET {{api}}/api/encuestas
+
+###
+
+POST {{api}}/api/encuestas
+Content-Type: application/json
+
+{ "titulo": "Satisfacción del servicio", "descripcion": "Encuesta de prueba" }

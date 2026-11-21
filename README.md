@@ -1,0 +1,38 @@
+# Encuestas de satisfacción
+
+Aplicación full stack para crear encuestas de satisfacción, responderlas desde un enlace público y ver sus resultados.
+
+## Tecnologías
+- **Backend:** ASP.NET Core 10 (Web API), Entity Framework Core, SQL Server
+- **Frontend:** React 18 + Vite
+- **Calidad:** xUnit, GitHub Actions (CI)
+- **Despliegue:** Docker, Azure App Service + Azure SQL
+
+## Arquitectura
+```
+src/
+  Encuestas.Domain          Entidades (Encuesta, Pregunta). No depende de nada.
+  Encuestas.Application     Casos de uso e interfaces (IEncuestaRepository).
+  Encuestas.Infrastructure  EF Core + SQL Server: implementa las interfaces.
+  Encuestas.Api             Controladores HTTP y configuración.
+tests/
+  Encuestas.Tests           Pruebas unitarias de la capa de aplicación.
+frontend/                   React + Vite.
+```
+Las dependencias apuntan hacia adentro (Api → Application → Domain) e Infrastructure implementa las interfaces de Application. Así se aplica la inversión de dependencias (SOLID).
+
+## Cómo correrlo
+```bash
+dotnet test Encuestas.slnx
+dotnet ef database update -p src/Encuestas.Infrastructure -s src/Encuestas.Api
+dotnet run --project src/Encuestas.Api        # http://localhost:5080
+cd frontend && npm install && npm run dev     # http://localhost:5173
+```
+
+## Estado
+- [x] Crear y listar encuestas
+- [ ] Editar y eliminar encuestas
+- [ ] Preguntas por encuesta
+- [ ] Responder encuesta (enlace público)
+- [ ] Resultados con gráficas
+- [ ] Despliegue en Azure
