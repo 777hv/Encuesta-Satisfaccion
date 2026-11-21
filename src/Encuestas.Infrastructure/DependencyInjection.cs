@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddDbContext<EncuestasDbContext>(o => o.UseSqlServer(connectionString));
         services.AddScoped<IEncuestaRepository, EncuestaRepository>();
+        services.AddScoped<IRespuestaRepository, RespuestaRepository>();
         return services;
     }
 }

@@ -81,6 +81,53 @@ namespace Encuestas.Infrastructure.Migrations
                     b.ToTable("Preguntas");
                 });
 
+            modelBuilder.Entity("Encuestas.Domain.Respuesta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EncuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EncuestaId");
+
+                    b.ToTable("Respuestas");
+                });
+
+            modelBuilder.Entity("Encuestas.Domain.RespuestaPregunta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PreguntaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RespuestaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Valor")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RespuestaId");
+
+                    b.ToTable("RespuestaPregunta");
+                });
+
             modelBuilder.Entity("Encuestas.Domain.Pregunta", b =>
                 {
                     b.HasOne("Encuestas.Domain.Encuesta", null)
@@ -90,9 +137,32 @@ namespace Encuestas.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Encuestas.Domain.Respuesta", b =>
+                {
+                    b.HasOne("Encuestas.Domain.Encuesta", null)
+                        .WithMany()
+                        .HasForeignKey("EncuestaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Encuestas.Domain.RespuestaPregunta", b =>
+                {
+                    b.HasOne("Encuestas.Domain.Respuesta", null)
+                        .WithMany("Detalles")
+                        .HasForeignKey("RespuestaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Encuestas.Domain.Encuesta", b =>
                 {
                     b.Navigation("Preguntas");
+                });
+
+            modelBuilder.Entity("Encuestas.Domain.Respuesta", b =>
+                {
+                    b.Navigation("Detalles");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,7 @@ namespace Encuestas.Tests;
 public class EncuestaServiceTests
 {
     // Repositorio falso en memoria: prueba la lógica sin base de datos.
-    private sealed class RepoEnMemoria : IEncuestaRepository
+    internal sealed class RepoEnMemoria : IEncuestaRepository
     {
         public List<Encuesta> Datos { get; } = [];
         public Task<List<Encuesta>> ListarAsync() => Task.FromResult(Datos);

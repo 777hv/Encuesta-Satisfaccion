@@ -31,8 +31,8 @@ cd frontend && npm install && npm run dev     # http://localhost:5173
 
 ## Estado
 - [x] Crear y listar encuestas
-- [ ] Editar y eliminar encuestas
-- [ ] Preguntas por encuesta
-- [ ] Responder encuesta (enlace público)
+- [x] Editar y eliminar encuestas
+- [x] Preguntas por encuesta (crear, editar, eliminar; tipos Escala 1 a 5, Sí/No y Texto libre)
+- [ ] Responder encuesta (enlace público): API lista, falta la página en React
 - [ ] Resultados con gráficas
 - [ ] Despliegue en Azure

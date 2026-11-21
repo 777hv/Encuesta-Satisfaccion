@@ -41,3 +41,10 @@ DELETE {{api}}/api/encuestas/3/preguntas/1
 ###
 
 GET {{api}}/api/encuestas/3
+
+###
+
+POST {{api}}/api/publico/encuestas/3/respuestas
+Content-Type: application/json
+
+{ "respuestas": [ { "preguntaId": 1002, "valor": "5" }, { "preguntaId": 1003, "valor": "No" } ] }
