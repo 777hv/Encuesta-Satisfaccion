@@ -17,5 +17,20 @@ public class EncuestaRepository(EncuestasDbContext db) : IEncuestaRepository
         db.Encuestas.Add(encuesta);
         await db.SaveChangesAsync();
         return encuesta;
+
     }
+
+    public async Task ActualizarAsync(Encuesta encuesta)
+    {
+
+        db.Encuestas.Update(encuesta);
+        await db.SaveChangesAsync();
+    }
+
+    public async Task EliminarAsync(Encuesta encuesta)
+    {
+        db.Encuestas.Remove(encuesta);
+        await db.SaveChangesAsync();
+    }
+
 }

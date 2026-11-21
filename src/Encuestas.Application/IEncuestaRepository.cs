@@ -8,4 +8,7 @@ public interface IEncuestaRepository
     Task<List<Encuesta>> ListarAsync();
     Task<Encuesta?> ObtenerAsync(int id);
     Task<Encuesta> CrearAsync(Encuesta encuesta);
+    Task ActualizarAsync(Encuesta encuesta);
+    Task EliminarAsync(Encuesta encuesta);
+
 }

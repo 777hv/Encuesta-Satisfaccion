@@ -8,3 +8,14 @@ POST {{api}}/api/encuestas
 Content-Type: application/json
 
 { "titulo": "Satisfacción del servicio", "descripcion": "Encuesta de prueba" }
+
+###
+
+PUT {{api}}/api/encuestas/2
+Content-Type: application/json
+
+{ "titulo": "Encuesta de compras (editada)", "descripcion": "Cambiada", "activa": true }
+
+###
+
+DELETE {{api}}/api/encuestas/2

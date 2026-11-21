@@ -17,6 +17,14 @@ public class EncuestaServiceTests
             Datos.Add(e);
             return Task.FromResult(e);
         }
+
+        public Task ActualizarAsync(Encuesta e) => Task.CompletedTask;
+
+        public Task EliminarAsync(Encuesta e)
+        {
+            Datos.Remove(e);
+            return Task.CompletedTask;
+        }
     }
 
     [Fact]
@@ -38,4 +46,28 @@ public class EncuestaServiceTests
         Assert.Equal("Satisfacción", encuesta.Titulo);
         Assert.Single(repo.Datos);
     }
+
+    [Fact]
+    public async Task Actualizar_IdInexistente_DevuelveFalse()
+    {
+        var service = new EncuestaService(new RepoEnMemoria());
+
+        var resultado = await service.ActualizarAsync(99, new ActualizarEncuestaDto("Nuevo", null, true));
+
+        Assert.False(resultado);
+    }
+
+    [Fact]
+    public async Task Eliminar_Existente_LaQuitaDeLaLista()
+    {
+        var repo = new RepoEnMemoria();
+        var service = new EncuestaService(repo);
+        var encuesta = await service.CrearAsync(new CrearEncuestaDto("Borrar", null));
+
+        var resultado = await service.EliminarAsync(encuesta.Id);
+
+        Assert.True(resultado);
+        Assert.Empty(repo.Datos);
+    }
+
 }

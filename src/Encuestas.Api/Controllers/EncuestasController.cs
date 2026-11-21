@@ -27,4 +27,23 @@ public class EncuestasController(EncuestaService service) : ControllerBase
             return ValidationProblem(ex.Message);
         }
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Actualizar(int id, ActualizarEncuestaDto dto)
+    {
+        try
+        {
+            return await service.ActualizarAsync(id, dto) ? NoContent() : NotFound();
+        }
+        catch (ArgumentException ex)
+        {
+            return ValidationProblem(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Eliminar(int id) =>
+        await service.EliminarAsync(id) ? NoContent() : NotFound();
+
+
 }
