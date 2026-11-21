@@ -13,13 +13,13 @@ public class EncuestasDbContext(DbContextOptions<EncuestasDbContext> options) : 
     {
         modelBuilder.Entity<Encuesta>(e =>
         {
-            e.Property(x => x.Titulo).HasMaxLength(200).IsRequired();
-            e.Property(x => x.Descripcion).HasMaxLength(1000);
+            e.Property(x => x.Titulo).HasMaxLength(Encuesta.TituloMax).IsRequired();
+            e.Property(x => x.Descripcion).HasMaxLength(Encuesta.DescripcionMax);
         });
 
         modelBuilder.Entity<Pregunta>(e =>
         {
-            e.Property(x => x.Texto).HasMaxLength(500).IsRequired();
+            e.Property(x => x.Texto).HasMaxLength(Pregunta.TextoMax).IsRequired();
             e.Property(x => x.Tipo).HasConversion<string>().HasMaxLength(20);
         });
 
@@ -30,7 +30,7 @@ public class EncuestasDbContext(DbContextOptions<EncuestasDbContext> options) : 
 
         modelBuilder.Entity<RespuestaPregunta>(e =>
         {
-            e.Property(x => x.Valor).HasMaxLength(2000).IsRequired();
+            e.Property(x => x.Valor).HasMaxLength(RespuestaPregunta.ValorMax).IsRequired();
             // shortcut: PreguntaId sin llave foránea para evitar el error de SQL Server "multiple cascade paths"; si se necesita integridad estricta, agregarla con OnDelete(Restrict).
         });
 

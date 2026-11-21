@@ -10,6 +10,7 @@ public class Respuesta
 
 public class RespuestaPregunta
 {
+    public const int ValorMax = 2000;
     public int Id { get; set; }
     public int RespuestaId { get; set; }
     public int PreguntaId { get; set; }

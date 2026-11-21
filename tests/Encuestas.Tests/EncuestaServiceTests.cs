@@ -126,4 +126,25 @@ public class EncuestaServiceTests
         Assert.Single(repo.Preguntas);
     }
 
+    [Fact]
+    public async Task Crear_TituloMuyLargo_LanzaError()
+    {
+        var service = new EncuestaService(new RepoEnMemoria());
+        var titulo = new string('a', Encuesta.TituloMax + 1);
+
+        await Assert.ThrowsAsync<ValidacionException>(() => service.CrearAsync(new CrearEncuestaDto(titulo, null)));
+    }
+
+    [Fact]
+    public async Task Crear_TituloEnElLimite_SeGuarda()
+    {
+        var repo = new RepoEnMemoria();
+        var service = new EncuestaService(repo);
+        var titulo = new string('a', Encuesta.TituloMax);
+
+        await service.CrearAsync(new CrearEncuestaDto(titulo, null));
+
+        Assert.Single(repo.Datos);
+    }
+
 }

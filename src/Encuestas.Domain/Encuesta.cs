@@ -2,6 +2,8 @@ namespace Encuestas.Domain;
 
 public class Encuesta
 {
+    public const int TituloMax = 200;
+    public const int DescripcionMax = 1000;
     public int Id { get; set; }
     public string Titulo { get; set; } = "";
     public string? Descripcion { get; set; }
@@ -12,6 +14,7 @@ public class Encuesta
 
 public class Pregunta
 {
+    public const int TextoMax = 500;
     public int Id { get; set; }
     public int EncuestaId { get; set; }
     public string Texto { get; set; } = "";

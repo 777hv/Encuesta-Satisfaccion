@@ -47,7 +47,7 @@ public class RespuestaService(IEncuestaRepository encuestas, IRespuestaRepositor
     {
         TipoPregunta.Escala1a5 => int.TryParse(valor, out var n) && n is >= 1 and <= 5,
         TipoPregunta.SiNo => valor is "Si" or "No",
-        TipoPregunta.TextoLibre => !string.IsNullOrWhiteSpace(valor) && valor.Length <= 2000,
+        TipoPregunta.TextoLibre => !string.IsNullOrWhiteSpace(valor) && valor.Length <= RespuestaPregunta.ValorMax,
         _ => false
     };
 }
