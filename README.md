@@ -34,5 +34,5 @@ cd frontend && npm install && npm run dev     # http://localhost:5173
 - [x] Editar y eliminar encuestas
 - [x] Preguntas por encuesta (crear, editar, eliminar; tipos Escala 1 a 5, Sí/No y Texto libre)
 - [ ] Responder encuesta (enlace público): API lista, falta la página en React
-- [ ] Resultados con gráficas
+- [ ] Resultados con gráficas: API lista (promedio, distribución, Sí/No), faltan las gráficas en React
 - [ ] Despliegue en Azure

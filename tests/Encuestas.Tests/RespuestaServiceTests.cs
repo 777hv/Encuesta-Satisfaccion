@@ -5,7 +5,7 @@ namespace Encuestas.Tests;
 
 public class RespuestaServiceTests
 {
-    private sealed class RespuestasEnMemoria : IRespuestaRepository
+    internal sealed class RespuestasEnMemoria : IRespuestaRepository
     {
         public List<Respuesta> Datos { get; } = [];
         public Task<Respuesta> CrearAsync(Respuesta r)
@@ -14,6 +14,13 @@ public class RespuestaServiceTests
             Datos.Add(r);
             return Task.FromResult(r);
         }
+
+        public Task<int> ContarAsync(int encuestaId) =>
+            Task.FromResult(Datos.Count(r => r.EncuestaId == encuestaId));
+
+        public Task<List<RespuestaPregunta>> ListarDetallesAsync(int encuestaId) =>
+            Task.FromResult(Datos.Where(r => r.EncuestaId == encuestaId).SelectMany(r => r.Detalles).ToList());
+
     }
 
     private readonly EncuestaServiceTests.RepoEnMemoria encuestas = new();

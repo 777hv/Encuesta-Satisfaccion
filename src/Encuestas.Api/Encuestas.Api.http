@@ -47,4 +47,8 @@ GET {{api}}/api/encuestas/3
 POST {{api}}/api/publico/encuestas/3/respuestas
 Content-Type: application/json
 
-{ "respuestas": [ { "preguntaId": 1002, "valor": "5" }, { "preguntaId": 1003, "valor": "No" } ] }
+{ "respuestas": [ { "preguntaId": 1002, "valor": "3" }, { "preguntaId": 1003, "valor": "Si" } ] }
+
+###
+
+GET {{api}}/api/encuestas/3/resultados

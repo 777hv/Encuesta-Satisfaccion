@@ -11,6 +11,10 @@ builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("En
     ?? throw new InvalidOperationException("Falta la cadena de conexión 'Encuestas' en appsettings.json."));
 builder.Services.AddScoped<EncuestaService>();
 builder.Services.AddScoped<RespuestaService>();
+builder.Services.AddScoped<ResultadoService>();
+builder.Services.AddSingleton<ICalculadoraResultado, CalculadoraEscala>();
+builder.Services.AddSingleton<ICalculadoraResultado, CalculadoraSiNo>();
+builder.Services.AddSingleton<ICalculadoraResultado, CalculadoraTexto>();
 builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
     .WithOrigins(builder.Configuration["FrontendUrl"] ?? "http://localhost:5173")
     .AllowAnyHeader()

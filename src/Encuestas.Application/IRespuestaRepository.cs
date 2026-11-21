@@ -6,4 +6,6 @@ namespace Encuestas.Application;
 public interface IRespuestaRepository
 {
     Task<Respuesta> CrearAsync(Respuesta respuesta);
+    Task<int> ContarAsync(int encuestaId);
+    Task<List<RespuestaPregunta>> ListarDetallesAsync(int encuestaId);
 }
