@@ -17,33 +17,16 @@ public class EncuestasController(EncuestaService service) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Crear(CrearEncuestaDto dto)
     {
-        try
-        {
-            var encuesta = await service.CrearAsync(dto);
-            return CreatedAtAction(nameof(Obtener), new { id = encuesta.Id }, encuesta);
-        }
-        catch (ArgumentException ex)
-        {
-            return ValidationProblem(ex.Message);
-        }
+        var encuesta = await service.CrearAsync(dto);
+        return CreatedAtAction(nameof(Obtener), new { id = encuesta.Id }, encuesta);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Actualizar(int id, ActualizarEncuestaDto dto)
-    {
-        try
-        {
-            return await service.ActualizarAsync(id, dto) ? NoContent() : NotFound();
-        }
-        catch (ArgumentException ex)
-        {
-            return ValidationProblem(ex.Message);
-        }
-    }
+    public async Task<IActionResult> Actualizar(int id, ActualizarEncuestaDto dto) =>
+        await service.ActualizarAsync(id, dto) ? NoContent() : NotFound();
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Eliminar(int id) =>
         await service.EliminarAsync(id) ? NoContent() : NotFound();
-
 
 }

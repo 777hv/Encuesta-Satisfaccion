@@ -67,7 +67,7 @@ public class RespuestaServiceTests
     [InlineData("cuatro")]
     public async Task Responder_EscalaInvalida_LanzaError(string valor)
     {
-        await Assert.ThrowsAsync<ArgumentException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
+        await Assert.ThrowsAsync<ValidacionException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
             [new RespuestaPreguntaDto(10, valor), new RespuestaPreguntaDto(11, "Si")])));
 
         Assert.Empty(respuestas.Datos);
@@ -76,7 +76,7 @@ public class RespuestaServiceTests
     [Fact]
     public async Task Responder_FaltaUnaPregunta_LanzaError()
     {
-        await Assert.ThrowsAsync<ArgumentException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
+        await Assert.ThrowsAsync<ValidacionException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
             [new RespuestaPreguntaDto(10, "4")])));
     }
 }

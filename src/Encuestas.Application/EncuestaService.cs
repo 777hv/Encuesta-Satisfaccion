@@ -14,7 +14,7 @@ public class EncuestaService(IEncuestaRepository repo)
     public async Task<Encuesta> CrearAsync(CrearEncuestaDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Titulo))
-            throw new ArgumentException("El título es obligatorio.");
+            throw new ValidacionException("El título es obligatorio.");
 
         return await repo.CrearAsync(new Encuesta
         {
@@ -28,7 +28,7 @@ public class EncuestaService(IEncuestaRepository repo)
     {
 
         if (string.IsNullOrWhiteSpace(dto.Titulo))
-            throw new ArgumentException("El título es obligatorio.");
+            throw new ValidacionException("El título es obligatorio.");
 
         var encuesta = await repo.ObtenerAsync(id);
         if (encuesta is null)
@@ -98,10 +98,10 @@ public class EncuestaService(IEncuestaRepository repo)
     private static void ValidarPregunta(PreguntaDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Texto))
-            throw new ArgumentException("El texto de la pregunta es obligatorio.");
+            throw new ValidacionException("El texto de la pregunta es obligatorio.");
 
         if (!Enum.IsDefined(dto.Tipo))
-            throw new ArgumentException("El tipo de pregunta no es válido.");
+            throw new ValidacionException("El tipo de pregunta no es válido.");
     }
 
 

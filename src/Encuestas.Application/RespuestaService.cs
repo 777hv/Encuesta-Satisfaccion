@@ -14,24 +14,24 @@ public class RespuestaService(IEncuestaRepository encuestas, IRespuestaRepositor
             return null;
 
         if (!encuesta.Activa)
-            throw new ArgumentException("La encuesta no está activa.");
+            throw new ValidacionException("La encuesta no está activa.");
 
         if (encuesta.Preguntas.Count == 0)
-            throw new ArgumentException("La encuesta no tiene preguntas.");
+            throw new ValidacionException("La encuesta no tiene preguntas.");
 
         var preguntas = encuesta.Preguntas.ToDictionary(p => p.Id);
 
         var idsRespondidos = dto.Respuestas.Select(r => r.PreguntaId).Distinct().Count();
         if (dto.Respuestas.Count != preguntas.Count || idsRespondidos != preguntas.Count)
-            throw new ArgumentException("Debe responder cada pregunta una sola vez.");
+            throw new ValidacionException("Debe responder cada pregunta una sola vez.");
 
         foreach (var r in dto.Respuestas)
         {
             if (!preguntas.TryGetValue(r.PreguntaId, out var pregunta))
-                throw new ArgumentException($"La pregunta {r.PreguntaId} no pertenece a esta encuesta.");
+                throw new ValidacionException($"La pregunta {r.PreguntaId} no pertenece a esta encuesta.");
 
             if (!EsValorValido(pregunta.Tipo, r.Valor))
-                throw new ArgumentException($"El valor de la pregunta {r.PreguntaId} no es válido.");
+                throw new ValidacionException($"El valor de la pregunta {r.PreguntaId} no es válido.");
         }
 
         return await respuestas.CrearAsync(new Respuesta

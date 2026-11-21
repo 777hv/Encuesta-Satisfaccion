@@ -53,7 +53,7 @@ public class EncuestaServiceTests
     {
         var service = new EncuestaService(new RepoEnMemoria());
 
-        await Assert.ThrowsAsync<ArgumentException>(() => service.CrearAsync(new CrearEncuestaDto("   ", null)));
+        await Assert.ThrowsAsync<ValidacionException>(() => service.CrearAsync(new CrearEncuestaDto("   ", null)));
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public class EncuestaServiceTests
         var service = new EncuestaService(repo);
         var encuesta = await service.CrearAsync(new CrearEncuestaDto("Encuesta", null));
 
-        await Assert.ThrowsAsync<ArgumentException>(() =>
+        await Assert.ThrowsAsync<ValidacionException>(() =>
             service.CrearPreguntaAsync(encuesta.Id, new PreguntaDto("Texto", (TipoPregunta)7, 1)));
     }
 
