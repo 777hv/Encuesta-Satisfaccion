@@ -25,6 +25,27 @@ public class EncuestaServiceTests
             Datos.Remove(e);
             return Task.CompletedTask;
         }
+
+        public List<Pregunta> Preguntas { get; } = [];
+
+        public Task<Pregunta?> ObtenerPreguntaAsync(int encuestaId, int preguntaId) =>
+            Task.FromResult(Preguntas.FirstOrDefault(p => p.Id == preguntaId && p.EncuestaId == encuestaId));
+
+        public Task<Pregunta> CrearPreguntaAsync(Pregunta p)
+        {
+            p.Id = Preguntas.Count + 1;
+            Preguntas.Add(p);
+            return Task.FromResult(p);
+        }
+
+        public Task ActualizarPreguntaAsync(Pregunta p) => Task.CompletedTask;
+
+        public Task EliminarPreguntaAsync(Pregunta p)
+        {
+            Preguntas.Remove(p);
+            return Task.CompletedTask;
+        }
+
     }
 
     [Fact]
@@ -68,6 +89,41 @@ public class EncuestaServiceTests
 
         Assert.True(resultado);
         Assert.Empty(repo.Datos);
+    }
+
+    [Fact]
+    public async Task CrearPregunta_EncuestaInexistente_DevuelveNull()
+    {
+        var service = new EncuestaService(new RepoEnMemoria());
+
+        var pregunta = await service.CrearPreguntaAsync(99, new PreguntaDto("¿Volvería?", TipoPregunta.SiNo, 1));
+
+        Assert.Null(pregunta);
+    }
+
+    [Fact]
+    public async Task CrearPregunta_TipoInvalido_LanzaError()
+    {
+        var repo = new RepoEnMemoria();
+        var service = new EncuestaService(repo);
+        var encuesta = await service.CrearAsync(new CrearEncuestaDto("Encuesta", null));
+
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            service.CrearPreguntaAsync(encuesta.Id, new PreguntaDto("Texto", (TipoPregunta)7, 1)));
+    }
+
+    [Fact]
+    public async Task EliminarPregunta_DeOtraEncuesta_DevuelveFalse()
+    {
+        var repo = new RepoEnMemoria();
+        var service = new EncuestaService(repo);
+        var encuesta = await service.CrearAsync(new CrearEncuestaDto("Encuesta", null));
+        var pregunta = await service.CrearPreguntaAsync(encuesta.Id, new PreguntaDto("Texto", TipoPregunta.SiNo, 1));
+
+        var resultado = await service.EliminarPreguntaAsync(encuesta.Id + 1, pregunta!.Id);
+
+        Assert.False(resultado);
+        Assert.Single(repo.Preguntas);
     }
 
 }

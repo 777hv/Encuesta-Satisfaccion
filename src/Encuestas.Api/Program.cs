@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using Encuestas.Application;
 using Encuestas.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("Encuestas")
     ?? throw new InvalidOperationException("Falta la cadena de conexión 'Encuestas' en appsettings.json."));

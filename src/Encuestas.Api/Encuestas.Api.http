@@ -19,3 +19,25 @@ Content-Type: application/json
 ###
 
 DELETE {{api}}/api/encuestas/2
+
+###
+
+POST {{api}}/api/encuestas/3/preguntas
+Content-Type: application/json
+
+{ "texto": "¿Qué tan satisfecho está con la atención?", "tipo": "Escala1a5", "orden": 1 }
+
+###
+
+PUT {{api}}/api/encuestas/3/preguntas/1
+Content-Type: application/json
+
+{ "texto": "¿Recomendaría el servicio?", "tipo": "SiNo", "orden": 1 }
+
+###
+
+DELETE {{api}}/api/encuestas/3/preguntas/1
+
+###
+
+GET {{api}}/api/encuestas/3

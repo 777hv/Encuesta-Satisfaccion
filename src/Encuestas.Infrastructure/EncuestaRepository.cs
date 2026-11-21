@@ -33,4 +33,27 @@ public class EncuestaRepository(EncuestasDbContext db) : IEncuestaRepository
         await db.SaveChangesAsync();
     }
 
+        public Task<Pregunta?> ObtenerPreguntaAsync(int encuestaId, int preguntaId) =>
+        db.Preguntas.AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == preguntaId && p.EncuestaId == encuestaId);
+
+    public async Task<Pregunta> CrearPreguntaAsync(Pregunta pregunta)
+    {
+        db.Preguntas.Add(pregunta);
+        await db.SaveChangesAsync();
+        return pregunta;
+    }
+
+    public async Task ActualizarPreguntaAsync(Pregunta pregunta)
+    {
+        db.Preguntas.Update(pregunta);
+        await db.SaveChangesAsync();
+    }
+
+    public async Task EliminarPreguntaAsync(Pregunta pregunta)
+    {
+        db.Preguntas.Remove(pregunta);
+        await db.SaveChangesAsync();
+    }
+
 }
