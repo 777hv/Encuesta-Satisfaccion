@@ -11,7 +11,7 @@ Aplicación full stack para crear encuestas de satisfacción, responderlas desde
 ## Arquitectura
 ```
 src/
-  Encuestas.Domain          Entidades (Encuesta, Pregunta). No depende de nada.
+  Encuestas.Domain          Entidades (Encuesta, Pregunta, Respuesta). No depende de nada.
   Encuestas.Application     Casos de uso e interfaces (IEncuestaRepository).
   Encuestas.Infrastructure  EF Core + SQL Server: implementa las interfaces.
   Encuestas.Api             Controladores HTTP y configuración.
@@ -33,6 +33,6 @@ cd frontend && npm install && npm run dev     # http://localhost:5173
 - [x] Crear y listar encuestas
 - [x] Editar y eliminar encuestas
 - [x] Preguntas por encuesta (crear, editar, eliminar; tipos Escala 1 a 5, Sí/No y Texto libre)
-- [ ] Responder encuesta (enlace público): API lista, falta la página en React
-- [ ] Resultados con gráficas: API lista (promedio, distribución, Sí/No), faltan las gráficas en React
+- [x] Responder encuesta desde un enlace público (solo encuestas activas)
+- [x] Resultados con gráficas (promedio y distribución, Sí/No, comentarios)
 - [ ] Despliegue en Azure

@@ -2,6 +2,7 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 import ListaEncuestas from "./pages/ListaEncuestas.jsx";
 import EditarEncuesta from "./pages/EditarEncuesta.jsx";
 import Responder from "./pages/Responder.jsx";
+import Resultados from "./pages/Resultados.jsx";
 
 export default function App() {
   // Quien responde no debe ver el enlace a la administración.
@@ -25,6 +26,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<ListaEncuestas />} />
         <Route path="/encuestas/:id" element={<EditarEncuesta />} />
+        <Route path="/encuestas/:id/resultados" element={<Resultados />} />
         <Route path="/responder/:id" element={<Responder />} />
         <Route path="*" element={<p>Página no encontrada.</p>} />
       </Routes>
