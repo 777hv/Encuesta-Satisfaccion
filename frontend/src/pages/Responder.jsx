@@ -16,8 +16,20 @@ export default function Responder() {
       .catch(() => setError("responder.noDisponible"));
   }, [id]);
 
-  if (enviada) return <h1>{t("responder.gracias")}</h1>;
-  if (!encuesta) return error ? <p role="alert">{t(error)}</p> : <p>{t("cargando")}</p>;
+  if (enviada)
+    return (
+      <div className="angosto gracias">
+        <h1>{t("responder.gracias")}</h1>
+        <p className="texto-suave">{t("responder.graciasDetalle")}</p>
+      </div>
+    );
+
+  if (!encuesta)
+    return (
+      <div className="angosto">
+        {error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>}
+      </div>
+    );
 
   const preguntas = [...encuesta.preguntas].sort((a, b) => a.orden - b.orden);
 
@@ -35,13 +47,17 @@ export default function Responder() {
   }
 
   return (
-    <>
-      <h1>{encuesta.titulo}</h1>
-      {encuesta.descripcion && <p>{encuesta.descripcion}</p>}
+    <div className="angosto">
+      <div className="encabezado">
+        <div>
+          <h1>{encuesta.titulo}</h1>
+          {encuesta.descripcion && <p className="texto-suave">{encuesta.descripcion}</p>}
+        </div>
+      </div>
 
       <form onSubmit={enviar}>
         {preguntas.map((p) => (
-          <fieldset key={p.id} style={{ marginBottom: "1rem" }}>
+          <fieldset key={p.id} className="pregunta-publica">
             <legend>{p.texto}</legend>
             <Control pregunta={p} />
           </fieldset>
@@ -50,7 +66,7 @@ export default function Responder() {
         {error && <p role="alert">{t(error)}</p>}
         <button type="submit">{t("responder.enviar")}</button>
       </form>
-    </>
+    </div>
   );
 }
 
@@ -59,17 +75,32 @@ function Control({ pregunta }) {
   const { t } = useIdioma();
   const nombre = String(pregunta.id);
 
-  if (pregunta.tipo === "TextoLibre")
-    return <textarea name={nombre} required maxLength={2000} rows={3} style={{ width: "100%" }} />;
+  if (pregunta.tipo === "TextoLibre") return <textarea name={nombre} required maxLength={2000} rows={4} />;
 
   // El valor que se envía no cambia ("Si"/"No"); solo se traduce lo que se muestra.
-  const opciones = pregunta.tipo === "SiNo"
-    ? [["Si", t("si")], ["No", t("no")]]
-    : ["1", "2", "3", "4", "5"].map((n) => [n, n]);
+  if (pregunta.tipo === "SiNo") return <Opciones nombre={nombre} opciones={[["Si", t("si")], ["No", t("no")]]} />;
 
-  return opciones.map(([valor, texto]) => (
-    <label key={valor} style={{ marginRight: "1rem" }}>
-      <input type="radio" name={nombre} value={valor} required /> {texto}
-    </label>
-  ));
+  return (
+    <>
+      <Opciones nombre={nombre} escala opciones={["1", "2", "3", "4", "5"].map((n) => [n, n])} />
+      <div className="escala-extremos">
+        <span>{t("responder.escalaMin")}</span>
+        <span>{t("responder.escalaMax")}</span>
+      </div>
+    </>
+  );
+}
+
+// Radios nativos (accesibles y con "required") mostrados como botones grandes.
+function Opciones({ nombre, opciones, escala }) {
+  return (
+    <div className={escala ? "opciones escala" : "opciones"}>
+      {opciones.map(([valor, texto]) => (
+        <label key={valor} className="opcion">
+          <input type="radio" name={nombre} value={valor} required />
+          <span>{texto}</span>
+        </label>
+      ))}
+    </div>
+  );
 }

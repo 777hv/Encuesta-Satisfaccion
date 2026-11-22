@@ -36,7 +36,7 @@ export default function EditarEncuesta() {
     }
   }
 
-  if (!encuesta) return error ? <p role="alert">{t(error)}</p> : <p>{t("cargando")}</p>;
+  if (!encuesta) return error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>;
 
   function guardarEncuesta(e) {
     e.preventDefault();
@@ -54,60 +54,77 @@ export default function EditarEncuesta() {
   const preguntas = [...encuesta.preguntas].sort((a, b) => a.orden - b.orden);
   const enlacePublico = `${location.origin}/responder/${id}`;
 
+  async function copiarEnlace() {
+    await navigator.clipboard.writeText(enlacePublico);
+    setError("");
+    setMensaje("editar.copiado");
+  }
+
   return (
     <>
-      <h1>{t("editar.titulo")}</h1>
+      <div className="encabezado">
+        <div>
+          <h1>{encuesta.titulo}</h1>
+          <p className="texto-suave">{t("editar.titulo")}</p>
+        </div>
+        <Link className="boton secundario" to={`/encuestas/${id}/resultados`}>{t("editar.verResultados")}</Link>
+      </div>
 
-      <form onSubmit={guardarEncuesta}>
-        <p>
-          <label>{t("editar.campoTitulo")}<br />
-            <input name="titulo" defaultValue={encuesta.titulo} required style={{ width: "100%" }} />
-          </label>
-        </p>
-        <p>
-          <label>{t("editar.campoDescripcion")}<br />
-            <textarea name="descripcion" defaultValue={encuesta.descripcion ?? ""} rows={3} style={{ width: "100%" }} />
-          </label>
-        </p>
-        <p>
-          <label>
+      <div className="avisos" aria-live="polite">
+        {error && <p role="alert">{t(error)}</p>}
+        {mensaje && <p role="status">{t(mensaje)}</p>}
+      </div>
+
+      <section>
+        <h2>{t("editar.datos")}</h2>
+        <form onSubmit={guardarEncuesta}>
+          <div className="campo">
+            <label htmlFor="titulo">{t("editar.campoTitulo")}</label>
+            <input id="titulo" name="titulo" defaultValue={encuesta.titulo} required maxLength={200} />
+          </div>
+          <div className="campo">
+            <label htmlFor="descripcion">{t("editar.campoDescripcion")}</label>
+            <textarea id="descripcion" name="descripcion" defaultValue={encuesta.descripcion ?? ""} rows={3} maxLength={1000} />
+          </div>
+          <label className="casilla">
             <input type="checkbox" name="activa" defaultChecked={encuesta.activa} /> {t("editar.activa")}
           </label>
-        </p>
-        <button type="submit">{t("editar.guardar")}</button>
-      </form>
+          <button type="submit">{t("editar.guardar")}</button>
+        </form>
+      </section>
 
-      {error && <p role="alert">{t(error)}</p>}
-      {mensaje && <p role="status">{t(mensaje)}</p>}
+      <section className="seccion">
+        <h2>{t("editar.enlace")}</h2>
+        <div className="enlace-publico">
+          <input readOnly value={enlacePublico} aria-label={t("editar.enlace")} onFocus={(e) => e.target.select()} />
+          <button type="button" className="secundario" onClick={copiarEnlace}>{t("editar.copiar")}</button>
+        </div>
+      </section>
 
-      <p>
-        {t("editar.enlace")} <a href={enlacePublico}>{enlacePublico}</a>
-        <br />
-        <Link to={`/encuestas/${id}/resultados`}>{t("editar.verResultados")}</Link>
-      </p>
+      <section className="seccion">
+        <h2>{t("editar.preguntas")}</h2>
+        {preguntas.length === 0 && <p className="texto-suave">{t("editar.sinPreguntas")}</p>}
+        {preguntas.map((p) => (
+          <PreguntaFormulario
+            key={p.id}
+            inicial={p}
+            textoBoton={t("editar.guardarPregunta")}
+            onGuardar={(datos) => ejecutar(() => api.actualizarPregunta(id, p.id, datos), "editar.preguntaGuardada")}
+            onEliminar={() =>
+              confirm(t("editar.confirmarEliminarPregunta")) &&
+              ejecutar(() => api.eliminarPregunta(id, p.id), "editar.preguntaEliminada")
+            }
+          />
+        ))}
 
-      <h2>{t("editar.preguntas")}</h2>
-      {preguntas.length === 0 && <p>{t("editar.sinPreguntas")}</p>}
-      {preguntas.map((p) => (
+        <h3 className="nueva-pregunta">{t("editar.nuevaPregunta")}</h3>
         <PreguntaFormulario
-          key={p.id}
-          inicial={p}
-          textoBoton={t("editar.guardarPregunta")}
-          onGuardar={(datos) => ejecutar(() => api.actualizarPregunta(id, p.id, datos), "editar.preguntaGuardada")}
-          onEliminar={() =>
-            confirm(t("editar.confirmarEliminarPregunta")) &&
-            ejecutar(() => api.eliminarPregunta(id, p.id), "editar.preguntaEliminada")
-          }
+          key={preguntas.length}
+          inicial={{ texto: "", tipo: "Escala1a5", orden: preguntas.length + 1 }}
+          textoBoton={t("editar.agregar")}
+          onGuardar={(datos) => ejecutar(() => api.crearPregunta(id, datos), "editar.preguntaAgregada")}
         />
-      ))}
-
-      <h3>{t("editar.nuevaPregunta")}</h3>
-      <PreguntaFormulario
-        key={preguntas.length}
-        inicial={{ texto: "", tipo: "Escala1a5", orden: preguntas.length + 1 }}
-        textoBoton={t("editar.agregar")}
-        onGuardar={(datos) => ejecutar(() => api.crearPregunta(id, datos), "editar.preguntaAgregada")}
-      />
+      </section>
     </>
   );
 }

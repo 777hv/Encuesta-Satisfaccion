@@ -14,22 +14,35 @@ export default function Resultados() {
     api.resultados(id).then(setDatos).catch((e) => setError(e.message));
   }, [id]);
 
-  if (!datos) return error ? <p role="alert">{t(error)}</p> : <p>{t("cargando")}</p>;
+  if (!datos) return error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>;
 
   return (
     <>
-      <h1>{t("resultados.titulo", { titulo: datos.titulo })}</h1>
-      <p>
-        <strong>{t("resultados.total", { n: datos.totalRespuestas })}</strong> ·{" "}
-        <Link to={`/encuestas/${id}`}>{t("resultados.editar")}</Link>
-      </p>
+      <div className="encabezado">
+        <div>
+          <h1>{datos.titulo}</h1>
+          <p className="texto-suave">{t("resultados.subtitulo")}</p>
+        </div>
+        <Link className="boton secundario" to={`/encuestas/${id}`}>{t("resultados.editar")}</Link>
+      </div>
+
+      <div className="metricas">
+        <div>
+          <div className="metrica-valor">{datos.totalRespuestas}</div>
+          <div className="metrica-etiqueta">{t("resultados.respuestasTotales")}</div>
+        </div>
+        <div>
+          <div className="metrica-valor">{datos.preguntas.length}</div>
+          <div className="metrica-etiqueta">{t("resultados.preguntas")}</div>
+        </div>
+      </div>
 
       {datos.totalRespuestas === 0 ? (
-        <p>{t("resultados.sinRespuestas")}</p>
+        <p className="texto-suave">{t("resultados.sinRespuestas")}</p>
       ) : (
         datos.preguntas.map((p) => (
-          <section key={p.preguntaId} style={{ marginBottom: "2rem" }}>
-            <h2 style={{ fontSize: "1.1rem" }}>{p.texto}</h2>
+          <section key={p.preguntaId} className="resultado">
+            <h2>{p.texto}</h2>
             <ResultadoPregunta tipo={p.tipo} resultado={p.resultado} />
           </section>
         ))
@@ -47,8 +60,9 @@ function ResultadoPregunta({ tipo, resultado }) {
     const barras = Object.entries(resultado.distribucion).map(([valor, cantidad]) => ({ valor, cantidad }));
     return (
       <>
-        <p>
-          {t("resultados.promedio")}: <strong style={{ fontSize: "1.5rem" }}>{resultado.promedio}</strong> / 5
+        <p className="resumen">
+          <span className="metrica-valor">{resultado.promedio.toFixed(1)}</span>
+          <span className="texto-suave">{t("resultados.promedioDe5")}</span>
         </p>
         <Barras datos={barras} />
       </>
@@ -57,20 +71,21 @@ function ResultadoPregunta({ tipo, resultado }) {
 
   if (tipo === "SiNo") {
     const total = resultado.si + resultado.no;
-    const porcentaje = (n) => (total === 0 ? 0 : Math.round((n / total) * 100));
+    const porcentajeSi = total === 0 ? 0 : Math.round((resultado.si / total) * 100);
     return (
       <>
-        <p>
-          {t("si")}: {resultado.si} ({porcentaje(resultado.si)} %) · {t("no")}: {resultado.no} ({porcentaje(resultado.no)} %)
+        <p className="resumen">
+          <span className="metrica-valor">{porcentajeSi} %</span>
+          <span className="texto-suave">{t("resultados.respondieronSi", { si: resultado.si, total })}</span>
         </p>
         <Barras datos={[{ valor: t("si"), cantidad: resultado.si }, { valor: t("no"), cantidad: resultado.no }]} />
       </>
     );
   }
 
-  if (resultado.comentarios.length === 0) return <p>{t("resultados.sinComentarios")}</p>;
+  if (resultado.comentarios.length === 0) return <p className="texto-suave">{t("resultados.sinComentarios")}</p>;
   return (
-    <ul>
+    <ul className="comentarios">
       {resultado.comentarios.map((c, i) => (
         <li key={i}>{c}</li>
       ))}
@@ -78,18 +93,24 @@ function ResultadoPregunta({ tipo, resultado }) {
   );
 }
 
-// Gráfica de barras sencilla: una barra por valor, con la cantidad encima.
+// Gráfica de barras con los colores del tema (variables CSS), así funciona en modo claro y oscuro.
 function Barras({ datos }) {
   const { t } = useIdioma();
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={datos} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
-        <CartesianGrid vertical={false} stroke="#e5e5e5" />
-        <XAxis dataKey="valor" tickLine={false} />
-        <YAxis allowDecimals={false} tickLine={false} axisLine={false} width={32} />
-        <Tooltip formatter={(n) => [n, t("resultados.respuestas")]} cursor={{ fill: "#f2f2f2" }} />
-        <Bar dataKey="cantidad" fill="#2a6fdb" radius={[4, 4, 0, 0]} maxBarSize={48}>
-          <LabelList dataKey="cantidad" position="top" />
+        <CartesianGrid vertical={false} stroke="var(--linea)" />
+        <XAxis dataKey="valor" tickLine={false} axisLine={{ stroke: "var(--linea-fuerte)" }}
+          tick={{ fill: "var(--texto-suave)", fontSize: 13 }} />
+        <YAxis allowDecimals={false} tickLine={false} axisLine={false} width={32}
+          tick={{ fill: "var(--texto-suave)", fontSize: 13 }} />
+        <Tooltip
+          formatter={(n) => [n, t("resultados.respuestas")]}
+          cursor={{ fill: "var(--superficie-sutil)" }}
+          contentStyle={{ background: "var(--superficie)", border: "1px solid var(--linea)", borderRadius: 6, color: "var(--texto)" }}
+        />
+        <Bar dataKey="cantidad" fill="var(--grafica)" radius={[3, 3, 0, 0]} maxBarSize={44}>
+          <LabelList dataKey="cantidad" position="top" fill="var(--texto)" fontSize={13} />
         </Bar>
       </BarChart>
     </ResponsiveContainer>

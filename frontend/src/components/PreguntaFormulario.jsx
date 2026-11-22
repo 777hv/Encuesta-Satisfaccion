@@ -16,20 +16,23 @@ export default function PreguntaFormulario({ inicial, onGuardar, onEliminar, tex
   }
 
   return (
-    <form onSubmit={guardar} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+    <form onSubmit={guardar} className="pregunta-fila">
       <input aria-label={t("pregunta.orden")} type="number" min="1" value={orden}
-        onChange={(e) => setOrden(e.target.value)} style={{ width: "4.5rem" }} required />
-      <input aria-label={t("pregunta.texto")} value={texto}
-        onChange={(e) => setTexto(e.target.value)} style={{ flex: 1 }} required />
+        onChange={(e) => setOrden(e.target.value)} required />
+      <input aria-label={t("pregunta.texto")} placeholder={t("pregunta.texto")} value={texto}
+        onChange={(e) => setTexto(e.target.value)} required maxLength={500} />
       <select aria-label={t("pregunta.tipo")} value={tipo} onChange={(e) => setTipo(e.target.value)}>
         {TIPOS.map((valor) => (
           <option key={valor} value={valor}>{t(`tipo.${valor}`)}</option>
         ))}
       </select>
-      <button type="submit">{textoBoton}</button>
-      {onEliminar && (
-        <button type="button" className="peligro" onClick={onEliminar}>{t("editar.eliminarPregunta")}</button>
-      )}
+      <div className="acciones">
+        {/* En preguntas existentes "Guardar" es secundario; "Agregar pregunta" es la acción principal. */}
+        <button type="submit" className={onEliminar ? "secundario" : undefined}>{textoBoton}</button>
+        {onEliminar && (
+          <button type="button" className="peligro" onClick={onEliminar}>{t("editar.eliminarPregunta")}</button>
+        )}
+      </div>
     </form>
   );
 }

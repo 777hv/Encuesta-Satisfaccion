@@ -12,21 +12,24 @@ export default function App() {
   const [tema, alternarTema] = useTema();
   const { idioma, setIdioma, t } = useIdioma();
 
+  const marca = (
+    <>
+      <img src="/favicon.svg?v=2" alt="" width="24" height="24" />
+      {t("marca")}
+    </>
+  );
+  const textoTema = tema === "oscuro" ? t("tema.claro") : t("tema.oscuro");
+
   return (
     <>
       <header className="barra">
         <div className="barra-contenido">
-          {esPublica ? (
-            <span className="marca">{t("marca")}</span>
-          ) : (
-            <Link to="/" className="marca">
-              {t("marca")}
-            </Link>
-          )}
+          {esPublica ? <span className="marca">{marca}</span> : <Link to="/" className="marca">{marca}</Link>}
+
           <div className="barra-acciones">
             <button
               type="button"
-              className="boton-icono"
+              className="secundario boton-icono"
               onClick={() => setIdioma(idioma === "es" ? "en" : "es")}
               aria-label={`${idioma.toUpperCase()}: ${t("idioma.cambiar")}`}
               title={t("idioma.cambiar")}
@@ -35,12 +38,10 @@ export default function App() {
             </button>
             <button
               type="button"
-              className="boton-icono"
+              className="secundario boton-icono"
               onClick={alternarTema}
-              aria-label={
-                tema === "oscuro" ? t("tema.claro") : t("tema.oscuro")
-              }
-              title={tema === "oscuro" ? t("tema.claro") : t("tema.oscuro")}
+              aria-label={textoTema}
+              title={textoTema}
             >
               {tema === "oscuro" ? "☀" : "☾"}
             </button>
