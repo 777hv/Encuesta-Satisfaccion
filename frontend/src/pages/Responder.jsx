@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api } from "../api.js";
+import { useIdioma } from "../idioma.jsx";
 
 export default function Responder() {
   const { id } = useParams();
+  const { t } = useIdioma();
   const [encuesta, setEncuesta] = useState(null);
   const [error, setError] = useState("");
   const [enviada, setEnviada] = useState(false);
 
   useEffect(() => {
-    api
-      .encuestaPublica(id)
+    api.encuestaPublica(id)
       .then(setEncuesta)
-      .catch(() =>
-        setError("Esta encuesta no existe o ya no acepta respuestas."),
-      );
+      .catch(() => setError("responder.noDisponible"));
   }, [id]);
 
-  if (enviada) return <h1>¡Gracias por responder!</h1>;
-  if (!encuesta) return error ? <p role="alert">{error}</p> : <p>Cargando…</p>;
+  if (enviada) return <h1>{t("responder.gracias")}</h1>;
+  if (!encuesta) return error ? <p role="alert">{t(error)}</p> : <p>{t("cargando")}</p>;
 
   const preguntas = [...encuesta.preguntas].sort((a, b) => a.orden - b.orden);
 
@@ -28,13 +27,7 @@ export default function Responder() {
     setError("");
     try {
       // Cada control se llama como el id de su pregunta, así armamos lo que espera la API.
-      await api.responder(
-        id,
-        preguntas.map((p) => ({
-          preguntaId: p.id,
-          valor: datos.get(String(p.id)) ?? "",
-        })),
-      );
+      await api.responder(id, preguntas.map((p) => ({ preguntaId: p.id, valor: datos.get(String(p.id)) ?? "" })));
       setEnviada(true);
     } catch (e) {
       setError(e.message);
@@ -54,8 +47,8 @@ export default function Responder() {
           </fieldset>
         ))}
 
-        {error && <p role="alert">{error}</p>}
-        <button type="submit">Enviar respuestas</button>
+        {error && <p role="alert">{t(error)}</p>}
+        <button type="submit">{t("responder.enviar")}</button>
       </form>
     </>
   );
@@ -63,25 +56,20 @@ export default function Responder() {
 
 // Muestra el control adecuado según el tipo de pregunta.
 function Control({ pregunta }) {
+  const { t } = useIdioma();
   const nombre = String(pregunta.id);
 
   if (pregunta.tipo === "TextoLibre")
-    return (
-      <textarea
-        name={nombre}
-        required
-        maxLength={2000}
-        rows={3}
-        style={{ width: "100%" }}
-      />
-    );
+    return <textarea name={nombre} required maxLength={2000} rows={3} style={{ width: "100%" }} />;
 
-  const opciones =
-    pregunta.tipo === "SiNo" ? ["Si", "No"] : ["1", "2", "3", "4", "5"];
-  return opciones.map((valor) => (
+  // El valor que se envía no cambia ("Si"/"No"); solo se traduce lo que se muestra.
+  const opciones = pregunta.tipo === "SiNo"
+    ? [["Si", t("si")], ["No", t("no")]]
+    : ["1", "2", "3", "4", "5"].map((n) => [n, n]);
+
+  return opciones.map(([valor, texto]) => (
     <label key={valor} style={{ marginRight: "1rem" }}>
-      <input type="radio" name={nombre} value={valor} required />{" "}
-      {valor === "Si" ? "Sí" : valor}
+      <input type="radio" name={nombre} value={valor} required /> {texto}
     </label>
   ));
 }

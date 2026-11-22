@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api.js";
+import { useIdioma } from "../idioma.jsx";
 
 export default function ListaEncuestas() {
-  const [encuestas, setEncuestas] = useState([]);
+  const { t } = useIdioma();
+  const [encuestas, setEncuestas] = useState(null);
   const [titulo, setTitulo] = useState("");
   const [error, setError] = useState("");
 
@@ -32,7 +34,7 @@ export default function ListaEncuestas() {
   }
 
   async function eliminar(encuesta) {
-    if (!confirm(`¿Eliminar "${encuesta.titulo}" con todas sus preguntas y respuestas?`)) return;
+    if (!confirm(t("lista.confirmarEliminar", { titulo: encuesta.titulo }))) return;
     try {
       await api.eliminarEncuesta(encuesta.id);
       cargar();
@@ -43,25 +45,33 @@ export default function ListaEncuestas() {
 
   return (
     <>
-      <h1>Encuestas de satisfacción</h1>
+      <h1>{t("lista.titulo")}</h1>
 
       <form onSubmit={crear}>
-        <label htmlFor="titulo">Título </label>
-        <input id="titulo" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />
-        <button type="submit">Crear</button>
+        <label htmlFor="titulo">{t("lista.nuevoTitulo")}</label>{" "}
+        <input id="titulo" value={titulo} onChange={(e) => setTitulo(e.target.value)} required />{" "}
+        <button type="submit">{t("lista.crear")}</button>
       </form>
 
-      {error && <p role="alert">{error}</p>}
+      {error && <p role="alert">{t(error)}</p>}
 
-      <ul>
-        {encuestas.map((e) => (
-          <li key={e.id}>
-            <Link to={`/encuestas/${e.id}`}>{e.titulo}</Link>{" "}
-            {!e.activa && <em>(inactiva) </em>}
-            <button onClick={() => eliminar(e)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
+      {!encuestas ? (
+        !error && <p>{t("cargando")}</p>
+      ) : encuestas.length === 0 ? (
+        <p>{t("lista.vacia")}</p>
+      ) : (
+        <ul>
+          {encuestas.map((encuesta) => (
+            <li key={encuesta.id}>
+              <Link to={`/encuestas/${encuesta.id}`}>{encuesta.titulo}</Link>{" "}
+              {!encuesta.activa && <em>({t("lista.inactiva")}) </em>}
+              <button type="button" className="peligro" onClick={() => eliminar(encuesta)}>
+                {t("lista.eliminar")}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

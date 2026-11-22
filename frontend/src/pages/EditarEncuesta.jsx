@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../api.js";
+import { useIdioma } from "../idioma.jsx";
 import PreguntaFormulario from "../components/PreguntaFormulario.jsx";
 
 export default function EditarEncuesta() {
   const { id } = useParams();
+  const { t } = useIdioma();
   const [encuesta, setEncuesta] = useState(null);
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -21,7 +23,7 @@ export default function EditarEncuesta() {
     cargar();
   }, [id]);
 
-  // Ejecuta una acción contra la API, muestra su error o un mensaje de éxito, y recarga la encuesta.
+  // Ejecuta una acción contra la API, muestra su error o un mensaje de éxito (clave de texto), y recarga la encuesta.
   async function ejecutar(accion, exito) {
     setError("");
     setMensaje("");
@@ -34,19 +36,18 @@ export default function EditarEncuesta() {
     }
   }
 
-  if (!encuesta) return error ? <p role="alert">{error}</p> : <p>Cargando…</p>;
+  if (!encuesta) return error ? <p role="alert">{t(error)}</p> : <p>{t("cargando")}</p>;
 
   function guardarEncuesta(e) {
     e.preventDefault();
     const datos = new FormData(e.target);
     ejecutar(
-      () =>
-        api.actualizarEncuesta(id, {
-          titulo: datos.get("titulo"),
-          descripcion: datos.get("descripcion"),
-          activa: datos.get("activa") === "on",
-        }),
-      "Encuesta guardada.",
+      () => api.actualizarEncuesta(id, {
+        titulo: datos.get("titulo"),
+        descripcion: datos.get("descripcion"),
+        activa: datos.get("activa") === "on",
+      }),
+      "editar.guardada"
     );
   }
 
@@ -55,86 +56,57 @@ export default function EditarEncuesta() {
 
   return (
     <>
-      <h1>Editar encuesta</h1>
+      <h1>{t("editar.titulo")}</h1>
 
       <form onSubmit={guardarEncuesta}>
         <p>
-          <label>
-            Título
-            <br />
-            <input
-              name="titulo"
-              defaultValue={encuesta.titulo}
-              required
-              style={{ width: "100%" }}
-            />
+          <label>{t("editar.campoTitulo")}<br />
+            <input name="titulo" defaultValue={encuesta.titulo} required style={{ width: "100%" }} />
+          </label>
+        </p>
+        <p>
+          <label>{t("editar.campoDescripcion")}<br />
+            <textarea name="descripcion" defaultValue={encuesta.descripcion ?? ""} rows={3} style={{ width: "100%" }} />
           </label>
         </p>
         <p>
           <label>
-            Descripción
-            <br />
-            <textarea
-              name="descripcion"
-              defaultValue={encuesta.descripcion ?? ""}
-              rows={3}
-              style={{ width: "100%" }}
-            />
+            <input type="checkbox" name="activa" defaultChecked={encuesta.activa} /> {t("editar.activa")}
           </label>
         </p>
-        <p>
-          <label>
-            <input
-              type="checkbox"
-              name="activa"
-              defaultChecked={encuesta.activa}
-            />{" "}
-            Activa (acepta respuestas)
-          </label>
-        </p>
-        <button type="submit">Guardar encuesta</button>
+        <button type="submit">{t("editar.guardar")}</button>
       </form>
 
-      {error && <p role="alert">{error}</p>}
-      {mensaje && <p role="status">{mensaje}</p>}
+      {error && <p role="alert">{t(error)}</p>}
+      {mensaje && <p role="status">{t(mensaje)}</p>}
 
       <p>
-        Enlace para responder: <a href={enlacePublico}>{enlacePublico}</a>
+        {t("editar.enlace")} <a href={enlacePublico}>{enlacePublico}</a>
         <br />
-        <Link to={`/encuestas/${id}/resultados`}>Ver resultados</Link>
+        <Link to={`/encuestas/${id}/resultados`}>{t("editar.verResultados")}</Link>
       </p>
 
-      <h2>Preguntas</h2>
-      {preguntas.length === 0 && <p>Todavía no hay preguntas.</p>}
+      <h2>{t("editar.preguntas")}</h2>
+      {preguntas.length === 0 && <p>{t("editar.sinPreguntas")}</p>}
       {preguntas.map((p) => (
         <PreguntaFormulario
           key={p.id}
           inicial={p}
-          textoBoton="Guardar"
-          onGuardar={(datos) =>
-            ejecutar(
-              () => api.actualizarPregunta(id, p.id, datos),
-              "Pregunta guardada.",
-            )
-          }
+          textoBoton={t("editar.guardarPregunta")}
+          onGuardar={(datos) => ejecutar(() => api.actualizarPregunta(id, p.id, datos), "editar.preguntaGuardada")}
           onEliminar={() =>
-            confirm("¿Eliminar esta pregunta?") &&
-            ejecutar(
-              () => api.eliminarPregunta(id, p.id),
-              "Pregunta eliminada.",
-            )
+            confirm(t("editar.confirmarEliminarPregunta")) &&
+            ejecutar(() => api.eliminarPregunta(id, p.id), "editar.preguntaEliminada")
           }
         />
       ))}
 
-      <h3>Nueva pregunta</h3>
+      <h3>{t("editar.nuevaPregunta")}</h3>
       <PreguntaFormulario
         key={preguntas.length}
         inicial={{ texto: "", tipo: "Escala1a5", orden: preguntas.length + 1 }}
-        textoBoton="Agregar"
-        onGuardar={(datos) =>
-          ejecutar(() => api.crearPregunta(id, datos), "Pregunta agregada.")
-        }
+        textoBoton={t("editar.agregar")}
+        onGuardar={(datos) => ejecutar(() => api.crearPregunta(id, datos), "editar.preguntaAgregada")}
       />
     </>
   );

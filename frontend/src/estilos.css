@@ -199,3 +199,16 @@ p[role="status"] {
   color: var(--exito);
   background: var(--exito-fondo);
 }
+
+/* Botones de la barra: idioma y tema, cuadrados y fáciles de tocar */
+.barra-acciones {
+  display: flex;
+  gap: 0.4rem;
+}
+.boton-icono {
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.5rem;
+  font-size: 1rem;
+  line-height: 1;
+}
