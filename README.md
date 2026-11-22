@@ -1,5 +1,7 @@
 # Encuestas de satisfacción
 
+[![CI](https://github.com/777hv/Encuesta-Satisfaccion/actions/workflows/ci.yml/badge.svg)](https://github.com/777hv/Encuesta-Satisfaccion/actions/workflows/ci.yml)
+
 Aplicación full stack para crear encuestas de satisfacción, responderlas desde un enlace público y ver sus resultados.
 
 ## Tecnologías
