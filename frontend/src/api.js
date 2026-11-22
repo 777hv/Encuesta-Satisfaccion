@@ -25,18 +25,32 @@ const json = (datos) => JSON.stringify(datos);
 export const api = {
   listarEncuestas: () => pedir("/encuestas"),
   obtenerEncuesta: (id) => pedir(`/encuestas/${id}`),
-  crearEncuesta: (datos) => pedir("/encuestas", { method: "POST", body: json(datos) }),
-  actualizarEncuesta: (id, datos) => pedir(`/encuestas/${id}`, { method: "PUT", body: json(datos) }),
+  crearEncuesta: (datos) =>
+    pedir("/encuestas", { method: "POST", body: json(datos) }),
+  actualizarEncuesta: (id, datos) =>
+    pedir(`/encuestas/${id}`, { method: "PUT", body: json(datos) }),
   eliminarEncuesta: (id) => pedir(`/encuestas/${id}`, { method: "DELETE" }),
 
   crearPregunta: (encuestaId, datos) =>
-    pedir(`/encuestas/${encuestaId}/preguntas`, { method: "POST", body: json(datos) }),
+    pedir(`/encuestas/${encuestaId}/preguntas`, {
+      method: "POST",
+      body: json(datos),
+    }),
   actualizarPregunta: (encuestaId, preguntaId, datos) =>
-    pedir(`/encuestas/${encuestaId}/preguntas/${preguntaId}`, { method: "PUT", body: json(datos) }),
+    pedir(`/encuestas/${encuestaId}/preguntas/${preguntaId}`, {
+      method: "PUT",
+      body: json(datos),
+    }),
   eliminarPregunta: (encuestaId, preguntaId) =>
-    pedir(`/encuestas/${encuestaId}/preguntas/${preguntaId}`, { method: "DELETE" }),
+    pedir(`/encuestas/${encuestaId}/preguntas/${preguntaId}`, {
+      method: "DELETE",
+    }),
 
+  encuestaPublica: (id) => pedir(`/publico/encuestas/${id}`),
   responder: (encuestaId, respuestas) =>
-    pedir(`/publico/encuestas/${encuestaId}/respuestas`, { method: "POST", body: json({ respuestas }) }),
+    pedir(`/publico/encuestas/${encuestaId}/respuestas`, {
+      method: "POST",
+      body: json({ respuestas }),
+    }),
   resultados: (encuestaId) => pedir(`/encuestas/${encuestaId}/resultados`),
 };

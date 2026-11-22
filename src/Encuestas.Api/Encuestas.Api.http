@@ -52,3 +52,9 @@ Content-Type: application/json
 ###
 
 GET {{api}}/api/encuestas/3/resultados
+
+###
+
+GET {{api}}/api/publico/encuestas/3
+Accept: application/json
+

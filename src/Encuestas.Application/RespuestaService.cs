@@ -7,6 +7,14 @@ public record ResponderEncuestaDto(List<RespuestaPreguntaDto> Respuestas);
 
 public class RespuestaService(IEncuestaRepository encuestas, IRespuestaRepository respuestas)
 {
+
+    // Lo que ve quien responde: solo encuestas que existen y están activas.
+    public async Task<Encuesta?> ObtenerParaResponderAsync(int encuestaId)
+    {
+        var encuesta = await encuestas.ObtenerAsync(encuestaId);
+        return encuesta is { Activa: true } ? encuesta : null;
+    }
+
     public async Task<Respuesta?> ResponderAsync(int encuestaId, ResponderEncuestaDto dto)
     {
         var encuesta = await encuestas.ObtenerAsync(encuestaId);

@@ -79,4 +79,22 @@ public class RespuestaServiceTests
         await Assert.ThrowsAsync<ValidacionException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
             [new RespuestaPreguntaDto(10, "4")])));
     }
+
+    [Fact]
+    public async Task ObtenerParaResponder_Activa_DevuelveEncuesta()
+    {
+        var encuesta = await service.ObtenerParaResponderAsync(1);
+
+        Assert.NotNull(encuesta);
+        Assert.Equal(2, encuesta.Preguntas.Count);
+    }
+
+    [Fact]
+    public async Task ObtenerParaResponder_Inactiva_DevuelveNull()
+    {
+        encuestas.Datos.Single().Activa = false;
+
+        Assert.Null(await service.ObtenerParaResponderAsync(1));
+    }
+
 }
