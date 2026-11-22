@@ -9,27 +9,31 @@ export default function App() {
   const esPublica = useLocation().pathname.startsWith("/responder");
 
   return (
-    <main
-      style={{
-        maxWidth: 720,
-        margin: "2rem auto",
-        padding: "0 1rem",
-        fontFamily: "system-ui",
-      }}
-    >
+    <>
       {!esPublica && (
-        <nav>
-          <Link to="/">← Todas las encuestas</Link>
-        </nav>
+        <header className="barra">
+          <div className="barra-contenido">
+            <Link to="/" className="marca">
+              Encuestas
+            </Link>
+          </div>
+        </header>
       )}
 
-      <Routes>
-        <Route path="/" element={<ListaEncuestas />} />
-        <Route path="/encuestas/:id" element={<EditarEncuesta />} />
-        <Route path="/encuestas/:id/resultados" element={<Resultados />} />
-        <Route path="/responder/:id" element={<Responder />} />
-        <Route path="*" element={<p>Página no encontrada.</p>} />
-      </Routes>
-    </main>
+      <main className="contenedor">
+        <Routes>
+          <Route path="/" element={<ListaEncuestas />} />
+          <Route path="/encuestas/:id" element={<EditarEncuesta />} />
+          <Route path="/encuestas/:id/resultados" element={<Resultados />} />
+          <Route path="/responder/:id" element={<Responder />} />
+          <Route
+            path="*"
+            element={
+              <p>Esta página no existe. Vuelve a la lista de encuestas.</p>
+            }
+          />
+        </Routes>
+      </main>
+    </>
   );
 }

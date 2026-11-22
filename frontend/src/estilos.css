@@ -1,0 +1,158 @@
+/* Variables de diseño: si cambias un color aquí, cambia en toda la app. */
+:root {
+  --tinta: #12343b;
+  --tinta-hover: #1d4c55;
+  --fondo: #eef1ee;
+  --superficie: #ffffff;
+  --linea: #cfd8d3;
+  --texto-suave: #55656a;
+  --acento: #e8a33d;
+  --peligro: #a8322d;
+  --exito: #22704f;
+  --radio: 8px;
+  --fuente-titulos: "Bricolage Grotesque", system-ui, sans-serif;
+  --fuente-texto: "Figtree", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font: 400 1.0625rem/1.55 var(--fuente-texto);
+}
+
+/* Títulos */
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-titulos);
+  line-height: 1.15;
+  margin: 1.5em 0 0.5em;
+}
+h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+a {
+  color: var(--tinta);
+  text-underline-offset: 3px;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Barra superior y contenedor */
+.barra {
+  background: var(--tinta);
+}
+.barra-contenido {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0.9rem 1.25rem;
+}
+.marca {
+  color: #fff;
+  font: 800 1.25rem var(--fuente-titulos);
+  text-decoration: none;
+}
+.contenedor {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+/* Formularios */
+label {
+  font-weight: 600;
+}
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  padding: 0.55rem 0.75rem;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--tinta);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+textarea {
+  resize: vertical;
+}
+
+/* Botones: el principal es petróleo; .secundario y .peligro son variantes. */
+button {
+  font: 600 0.95rem var(--fuente-texto);
+  color: #fff;
+  background: var(--tinta);
+  border: 1px solid var(--tinta);
+  border-radius: var(--radio);
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+button:hover {
+  background: var(--tinta-hover);
+}
+button.secundario {
+  color: var(--tinta);
+  background: transparent;
+  border-color: var(--linea);
+}
+button.secundario:hover {
+  border-color: var(--tinta);
+}
+button.peligro {
+  color: var(--peligro);
+  background: transparent;
+  border-color: transparent;
+}
+button.peligro:hover {
+  border-color: var(--peligro);
+}
+
+/* Foco visible para quien navega con teclado */
+:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 2px;
+}
+.barra :focus-visible {
+  outline-color: #fff;
+}
+
+/* Mensajes: se aplican a los <p role="alert"> y <p role="status"> que ya tienen las páginas. */
+p[role="alert"],
+p[role="status"] {
+  padding: 0.6rem 0.9rem;
+  border-left: 4px solid;
+  border-radius: 0 var(--radio) var(--radio) 0;
+}
+p[role="alert"] {
+  color: var(--peligro);
+  background: #f9e7e5;
+}
+p[role="status"] {
+  color: var(--exito);
+  background: #e3f1ea;
+}
