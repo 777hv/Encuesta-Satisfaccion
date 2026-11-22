@@ -19,7 +19,12 @@ public class CalculadoraEscala : ICalculadoraResultado
 
     public object Calcular(List<string> valores)
     {
-        var numeros = valores.Select(int.Parse).ToList();
+        // Ignora valores que no son escala (p. ej. si la pregunta cambió de tipo después de recibir respuestas).
+        var numeros = valores
+            .Select(v => int.TryParse(v, out var n) ? n : 0)
+            .Where(n => n is >= 1 and <= 5)
+            .ToList();
+
         return new ResultadoEscala(
             numeros.Count == 0 ? 0 : Math.Round(numeros.Average(), 2),
             Enumerable.Range(1, 5).ToDictionary(n => n, n => numeros.Count(x => x == n)));

@@ -84,4 +84,13 @@ public class ResultadoServiceTests
 
         Assert.Null(await service.ObtenerAsync(99));
     }
+
+    [Fact]
+    public void CalculadoraEscala_IgnoraValoresQueNoSonEscala()
+    {
+        var resultado = (ResultadoEscala)new CalculadoraEscala().Calcular(["4", "Si", "No"]);
+
+        Assert.Equal(4, resultado.Promedio);
+    }
+
 }
