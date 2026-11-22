@@ -1,17 +1,43 @@
-/* Variables de diseño: si cambias un color aquí, cambia en toda la app. */
+/* Variables de diseño, nombradas por su función. El modo oscuro solo cambia sus valores. */
 :root {
-  --tinta: #12343b;
-  --tinta-hover: #1d4c55;
+  color-scheme: light;
+  --texto: #12343b;
+  --texto-suave: #55656a;
   --fondo: #eef1ee;
   --superficie: #ffffff;
   --linea: #cfd8d3;
-  --texto-suave: #55656a;
+  --primario: #12343b;
+  --primario-hover: #1d4c55;
+  --sobre-primario: #ffffff;
+  --barra-fondo: #12343b;
+  --barra-texto: #ffffff;
   --acento: #e8a33d;
   --peligro: #a8322d;
+  --peligro-fondo: #f9e7e5;
   --exito: #22704f;
+  --exito-fondo: #e3f1ea;
   --radio: 8px;
   --fuente-titulos: "Bricolage Grotesque", system-ui, sans-serif;
   --fuente-texto: "Figtree", system-ui, sans-serif;
+}
+
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+  --texto: #e3ebe8;
+  --texto-suave: #9fb1ad;
+  --fondo: #0f1f22;
+  --superficie: #172b2f;
+  --linea: #2c4448;
+  --primario: #8fd0c6;
+  --primario-hover: #a9ded6;
+  --sobre-primario: #0f1f22;
+  --barra-fondo: #172b2f;
+  --barra-texto: #e3ebe8;
+  --acento: #f0b452;
+  --peligro: #f08a80;
+  --peligro-fondo: #3a1f1e;
+  --exito: #7fd1a8;
+  --exito-fondo: #17322a;
 }
 
 *,
@@ -23,7 +49,7 @@
 body {
   margin: 0;
   background: var(--fondo);
-  color: var(--tinta);
+  color: var(--texto);
   font: 400 1.0625rem/1.55 var(--fuente-texto);
 }
 
@@ -51,27 +77,14 @@ h3 {
 }
 
 a {
-  color: var(--tinta);
+  color: var(--texto);
   text-underline-offset: 3px;
 }
 a:hover {
   text-decoration-thickness: 2px;
 }
 
-/* Barra superior y contenedor */
-.barra {
-  background: var(--tinta);
-}
-.barra-contenido {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0.9rem 1.25rem;
-}
-.marca {
-  color: #fff;
-  font: 800 1.25rem var(--fuente-titulos);
-  text-decoration: none;
-}
+/* Contenedor */
 .contenedor {
   max-width: 760px;
   margin: 0 auto;
@@ -94,7 +107,7 @@ select {
 }
 input[type="checkbox"],
 input[type="radio"] {
-  accent-color: var(--tinta);
+  accent-color: var(--primario);
   width: 1.1rem;
   height: 1.1rem;
 }
@@ -102,26 +115,26 @@ textarea {
   resize: vertical;
 }
 
-/* Botones: el principal es petróleo; .secundario y .peligro son variantes. */
+/* Botones: el principal usa --primario; .secundario y .peligro son variantes. */
 button {
   font: 600 0.95rem var(--fuente-texto);
-  color: #fff;
-  background: var(--tinta);
-  border: 1px solid var(--tinta);
+  color: var(--sobre-primario);
+  background: var(--primario);
+  border: 1px solid var(--primario);
   border-radius: var(--radio);
   padding: 0.55rem 1rem;
   cursor: pointer;
 }
 button:hover {
-  background: var(--tinta-hover);
+  background: var(--primario-hover);
 }
 button.secundario {
-  color: var(--tinta);
+  color: var(--texto);
   background: transparent;
   border-color: var(--linea);
 }
 button.secundario:hover {
-  border-color: var(--tinta);
+  border-color: var(--texto);
 }
 button.peligro {
   color: var(--peligro);
@@ -132,13 +145,43 @@ button.peligro:hover {
   border-color: var(--peligro);
 }
 
+/* Barra superior */
+.barra {
+  background: var(--barra-fondo);
+  color: var(--barra-texto);
+  border-bottom: 1px solid var(--linea);
+}
+.barra-contenido {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.marca {
+  color: inherit;
+  font: 800 1.25rem var(--fuente-titulos);
+  text-decoration: none;
+}
+.barra button,
+.barra button:hover {
+  color: inherit;
+  background: transparent;
+  border-color: color-mix(in srgb, var(--barra-texto) 40%, transparent);
+}
+.barra button:hover {
+  border-color: var(--barra-texto);
+}
+
 /* Foco visible para quien navega con teclado */
 :focus-visible {
-  outline: 2px solid var(--tinta);
+  outline: 2px solid var(--texto);
   outline-offset: 2px;
 }
 .barra :focus-visible {
-  outline-color: #fff;
+  outline-color: var(--barra-texto);
 }
 
 /* Mensajes: se aplican a los <p role="alert"> y <p role="status"> que ya tienen las páginas. */
@@ -150,9 +193,9 @@ p[role="status"] {
 }
 p[role="alert"] {
   color: var(--peligro);
-  background: #f9e7e5;
+  background: var(--peligro-fondo);
 }
 p[role="status"] {
   color: var(--exito);
-  background: #e3f1ea;
+  background: var(--exito-fondo);
 }
