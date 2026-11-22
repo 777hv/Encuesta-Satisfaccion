@@ -31,6 +31,14 @@ dotnet run --project src/Encuestas.Api        # http://localhost:5080
 cd frontend && npm install && npm run dev     # http://localhost:5173
 ```
 
+### Con Docker (API + SQL Server)
+```bash
+cp .env.example .env                          # y cambia la contraseña
+docker compose up -d --build                  # API en http://localhost:5080
+dotnet ef database update -p src/Encuestas.Infrastructure -s src/Encuestas.Api --connection "Server=localhost,1433;Database=EncuestasDb;User Id=sa;Password=<tu clave>;TrustServerCertificate=True"
+cd frontend && npm install && npm run dev
+```
+
 ## Estado
 - [x] Crear y listar encuestas
 - [x] Editar y eliminar encuestas

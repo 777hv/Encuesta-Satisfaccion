@@ -1,0 +1,24 @@
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD:?Define SA_PASSWORD en el archivo .env}
+    ports:
+      - "1433:1433"
+    volumes:
+      - datos-sql:/var/opt/mssql
+
+  api:
+    build: .
+    environment:
+      # "sql" es el nombre del servicio de arriba: dentro de la red de compose funciona como nombre de servidor.
+      ConnectionStrings__Encuestas: "Server=sql;Database=EncuestasDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True"
+      FrontendUrl: http://localhost:5173
+    ports:
+      - "5080:8080"
+    depends_on:
+      - sql
+
+volumes:
+  datos-sql:
