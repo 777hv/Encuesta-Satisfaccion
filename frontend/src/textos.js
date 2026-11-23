@@ -78,6 +78,11 @@ export const textos = {
     "pregunta.tipo": "Tipo",
     "pregunta.obligatoria": "Obligatoria",
     "responder.opcional": "Opcional",
+    "responder.autoguardado":
+      "Tu avance se guarda automáticamente en este dispositivo.",
+    "responder.recuperado":
+      "Recuperamos las respuestas que dejaste pendientes.",
+    "responder.empezarDeNuevo": "Empezar de nuevo",
 
     "responder.noDisponible":
       "Esta encuesta no existe o ya no acepta respuestas.",
@@ -178,6 +183,10 @@ export const textos = {
     "pregunta.tipo": "Type",
     "pregunta.obligatoria": "Required",
     "responder.opcional": "Optional",
+    "responder.autoguardado":
+      "Your progress is saved automatically on this device.",
+    "responder.recuperado": "We restored the answers you left unfinished.",
+    "responder.empezarDeNuevo": "Start over",
 
     "responder.noDisponible":
       "This survey doesn't exist or is no longer accepting responses.",

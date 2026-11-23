@@ -565,6 +565,18 @@ p[role="status"] {
   margin-bottom: 1rem;
 }
 
+/* Aviso de borrador recuperado, con su botón a la derecha */
+.aviso-borrador {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.nota {
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
 
 /* Celular */
 @media (max-width: 640px) {
