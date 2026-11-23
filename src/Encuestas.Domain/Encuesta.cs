@@ -8,6 +8,8 @@ public class Encuesta
     public string Titulo { get; set; } = "";
     public string? Descripcion { get; set; }
     public bool Activa { get; set; } = true;
+    public Tematica Tematica { get; set; } = Tematica.General;
+    public EstiloEncuesta Estilo { get; set; } = EstiloEncuesta.Petroleo;
     public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
     public List<Pregunta> Preguntas { get; set; } = [];
 }
@@ -27,4 +29,25 @@ public enum TipoPregunta
     Escala1a5,
     SiNo,
     TextoLibre
+}
+
+
+public enum Tematica
+{
+    General,
+    AtencionCliente,
+    Producto,
+    Evento,
+    Empleados,
+    Educacion
+}
+
+public enum EstiloEncuesta
+{
+    Petroleo,
+    Coral,
+    Lavanda,
+    Bosque,
+    Ambar,
+    Grafito
 }

@@ -15,6 +15,8 @@ public class EncuestasDbContext(DbContextOptions<EncuestasDbContext> options) : 
         {
             e.Property(x => x.Titulo).HasMaxLength(Encuesta.TituloMax).IsRequired();
             e.Property(x => x.Descripcion).HasMaxLength(Encuesta.DescripcionMax);
+            e.Property(x => x.Tematica).HasConversion<string>().HasMaxLength(20);
+            e.Property(x => x.Estilo).HasConversion<string>().HasMaxLength(20);
         });
 
         modelBuilder.Entity<Pregunta>(e =>

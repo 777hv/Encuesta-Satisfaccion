@@ -2,8 +2,18 @@ using Encuestas.Domain;
 
 namespace Encuestas.Application;
 
-public record CrearEncuestaDto(string Titulo, string? Descripcion);
-public record ActualizarEncuestaDto(string Titulo, string? Descripcion, bool Activa);
+public record CrearEncuestaDto(
+    string Titulo,
+    string? Descripcion,
+    Tematica Tematica = Tematica.General,
+    EstiloEncuesta Estilo = EstiloEncuesta.Petroleo);
+
+public record ActualizarEncuestaDto(
+    string Titulo,
+    string? Descripcion,
+    bool Activa,
+    Tematica Tematica = Tematica.General,
+    EstiloEncuesta Estilo = EstiloEncuesta.Petroleo);
 public record PreguntaDto(string Texto, TipoPregunta Tipo, int Orden);
 public class EncuestaService(IEncuestaRepository repo)
 {
@@ -13,18 +23,20 @@ public class EncuestaService(IEncuestaRepository repo)
 
     public async Task<Encuesta> CrearAsync(CrearEncuestaDto dto)
     {
-        ValidarEncuesta(dto.Titulo, dto.Descripcion);
+        ValidarEncuesta(dto.Titulo, dto.Descripcion, dto.Tematica, dto.Estilo);
 
         return await repo.CrearAsync(new Encuesta
         {
             Titulo = dto.Titulo.Trim(),
-            Descripcion = dto.Descripcion?.Trim()
+            Descripcion = dto.Descripcion?.Trim(),
+            Tematica = dto.Tematica,
+            Estilo = dto.Estilo
         });
     }
 
     public async Task<bool> ActualizarAsync(int id, ActualizarEncuestaDto dto)
     {
-        ValidarEncuesta(dto.Titulo, dto.Descripcion);
+        ValidarEncuesta(dto.Titulo, dto.Descripcion, dto.Tematica, dto.Estilo);
 
         var encuesta = await repo.ObtenerAsync(id);
         if (encuesta is null)
@@ -33,6 +45,8 @@ public class EncuestaService(IEncuestaRepository repo)
         encuesta.Titulo = dto.Titulo.Trim();
         encuesta.Descripcion = dto.Descripcion?.Trim();
         encuesta.Activa = dto.Activa;
+        encuesta.Tematica = dto.Tematica;
+        encuesta.Estilo = dto.Estilo;
 
         await repo.ActualizarAsync(encuesta);
         return true;
@@ -91,7 +105,7 @@ public class EncuestaService(IEncuestaRepository repo)
         return true;
     }
 
-    private static void ValidarEncuesta(string titulo, string? descripcion)
+    private static void ValidarEncuesta(string titulo, string? descripcion, Tematica tematica, EstiloEncuesta estilo)
     {
         if (string.IsNullOrWhiteSpace(titulo))
             throw new ValidacionException("El título es obligatorio.");
@@ -101,6 +115,12 @@ public class EncuestaService(IEncuestaRepository repo)
 
         if (descripcion?.Trim().Length > Encuesta.DescripcionMax)
             throw new ValidacionException($"La descripción no puede superar {Encuesta.DescripcionMax} caracteres.");
+
+        if (!Enum.IsDefined(tematica))
+            throw new ValidacionException("La temática no es válida.");
+
+        if (!Enum.IsDefined(estilo))
+            throw new ValidacionException("El estilo no es válido.");
     }
 
     private static void ValidarPregunta(PreguntaDto dto)

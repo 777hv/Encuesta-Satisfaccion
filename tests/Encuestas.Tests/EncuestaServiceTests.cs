@@ -147,4 +147,37 @@ public class EncuestaServiceTests
         Assert.Single(repo.Datos);
     }
 
+    [Fact]
+    public async Task Crear_ConTematicaInvalida_LanzaError()
+    {
+        var service = new EncuestaService(new RepoEnMemoria());
+
+        await Assert.ThrowsAsync<ValidacionException>(() =>
+            service.CrearAsync(new CrearEncuestaDto("Encuesta", null, (Tematica)99)));
+    }
+
+    [Fact]
+    public async Task Actualizar_EstiloInvalido_LanzaError()
+    {
+        var repo = new RepoEnMemoria();
+        repo.Datos.Add(new Encuesta { Id = 1, Titulo = "Encuesta" });
+        var service = new EncuestaService(repo);
+
+        await Assert.ThrowsAsync<ValidacionException>(() =>
+            service.ActualizarAsync(1, new ActualizarEncuestaDto("Encuesta", null, true, Tematica.General, (EstiloEncuesta)99)));
+    }
+
+    [Fact]
+    public async Task Actualizar_GuardaTematicaYEstilo()
+    {
+        var repo = new RepoEnMemoria();
+        repo.Datos.Add(new Encuesta { Id = 1, Titulo = "Encuesta" });
+        var service = new EncuestaService(repo);
+
+        await service.ActualizarAsync(1, new ActualizarEncuestaDto("Encuesta", null, true, Tematica.Evento, EstiloEncuesta.Coral));
+
+        Assert.Equal(Tematica.Evento, repo.Datos[0].Tematica);
+        Assert.Equal(EstiloEncuesta.Coral, repo.Datos[0].Estilo);
+    }
+
 }
