@@ -598,3 +598,39 @@ p[role="status"] {
     grid-column: 1 / -1;
   }
 }
+
+/* Plantillas */
+.plantillas {
+  margin: -1.5rem 0 2.5rem;
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  background: var(--superficie);
+}
+.plantillas summary {
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.plantillas ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plantillas li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--linea);
+}
+.plantillas li > div {
+  flex: 1;
+}
+.plantillas li p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -50,6 +50,10 @@ export const textos = {
     "lista.eliminar": "Eliminar",
     "lista.confirmarEliminar":
       '¿Eliminar "{titulo}" con todas sus preguntas y respuestas?',
+    "plantillas.titulo": "Empezar desde una plantilla",
+    "plantillas.preguntas": "{n} preguntas",
+    "plantillas.usar": "Usar plantilla",
+    "plantillas.creando": "Creando…",
 
     "editar.titulo": "Editar encuesta",
     "editar.verResultados": "Ver resultados",
@@ -157,6 +161,10 @@ export const textos = {
     "lista.eliminar": "Delete",
     "lista.confirmarEliminar":
       'Delete "{titulo}" with all its questions and answers?',
+    "plantillas.titulo": "Start from a template",
+    "plantillas.preguntas": "{n} questions",
+    "plantillas.usar": "Use template",
+    "plantillas.creando": "Creating…",
 
     "editar.titulo": "Edit survey",
     "editar.verResultados": "View results",

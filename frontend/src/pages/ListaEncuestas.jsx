@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { PLANTILLAS } from "../plantillas.js";
 import { api } from "../api.js";
 import { useIdioma } from "../idioma.jsx";
 import { TEMATICAS } from "../catalogos.js";
@@ -10,6 +11,8 @@ export default function ListaEncuestas() {
   const [titulo, setTitulo] = useState("");
   const [filtro, setFiltro] = useState("");
   const [error, setError] = useState("");
+  const [creando, setCreando] = useState(null); // id de la plantilla que se está copiando
+  const navigate = useNavigate();
 
   async function cargar() {
     try {
@@ -46,6 +49,33 @@ export default function ListaEncuestas() {
     }
   }
 
+  // Copia la plantilla en el idioma activo y abre el editor para modificarla.
+  // shortcut: una llamada por pregunta (4 por plantilla); si las plantillas crecen, crear encuesta y preguntas en un solo POST.
+  async function usarPlantilla(plantilla) {
+    setCreando(plantilla.id);
+    setError("");
+    try {
+      const encuesta = await api.crearEncuesta({
+        titulo: plantilla.titulo[idioma],
+        descripcion: plantilla.descripcion[idioma],
+        tematica: plantilla.tematica,
+        estilo: plantilla.estilo,
+      });
+      for (const [i, p] of plantilla.preguntas.entries())
+        await api.crearPregunta(encuesta.id, {
+          texto: p[idioma],
+          tipo: p.tipo,
+          orden: i + 1,
+          obligatoria: p.obligatoria,
+        });
+      navigate(`/encuestas/${encuesta.id}`);
+    } catch (e) {
+      setError(e.message);
+      setCreando(null);
+      cargar();
+    }
+  }
+
   const fecha = (texto) =>
     new Date(texto).toLocaleDateString(idioma, {
       day: "numeric",
@@ -79,6 +109,38 @@ export default function ListaEncuestas() {
         />
         <button type="submit">{t("lista.crear")}</button>
       </form>
+
+      <details className="plantillas">
+        <summary>{t("plantillas.titulo")}</summary>
+        <ul>
+          {PLANTILLAS.map((p) => (
+            <li key={p.id}>
+              <span
+                className="muestra-color"
+                data-estilo={p.estilo}
+                aria-hidden="true"
+              />
+              <div>
+                <strong>{p.titulo[idioma]}</strong>
+                <p className="texto-suave">
+                  {t(`tematica.${p.tematica}`)} ·{" "}
+                  {t("plantillas.preguntas", { n: p.preguntas.length })}
+                </p>
+              </div>
+              <button
+                type="button"
+                className="secundario"
+                disabled={creando !== null}
+                onClick={() => usarPlantilla(p)}
+              >
+                {creando === p.id
+                  ? t("plantillas.creando")
+                  : t("plantillas.usar")}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </details>
 
       {error && <p role="alert">{t(error)}</p>}
 
