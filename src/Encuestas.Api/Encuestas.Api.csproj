@@ -1,4 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>80b697e7-d660-445d-ba98-29ba73aee58d</UserSecretsId>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Encuestas.Application\Encuestas.Application.csproj" />
     <ProjectReference Include="..\Encuestas.Infrastructure\Encuestas.Infrastructure.csproj" />
