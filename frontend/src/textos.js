@@ -103,6 +103,8 @@ export const textos = {
     "resultados.respondieronSi": "respondió Sí ({si} de {total})",
     "resultados.sinComentarios": "Sin comentarios.",
     "resultados.respuestas": "Respuestas",
+    "traduccion.automatica":
+      "Los textos se traducen automáticamente al cambiar de idioma.",
   },
   en: {
     marca: "Surveys",
@@ -207,6 +209,8 @@ export const textos = {
     "resultados.respondieronSi": "answered Yes ({si} of {total})",
     "resultados.sinComentarios": "No comments.",
     "resultados.respuestas": "Responses",
+    "traduccion.automatica":
+      "Text is translated automatically when you switch languages.",
   },
 };
 

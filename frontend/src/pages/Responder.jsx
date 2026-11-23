@@ -14,7 +14,7 @@ function leerBorrador(clave) {
 
 export default function Responder() {
   const { id } = useParams();
-  const { t } = useIdioma();
+  const { t, idioma } = useIdioma();
   const claveBorrador = `borrador-encuesta-${id}`;
   const [encuesta, setEncuesta] = useState(null);
   const [error, setError] = useState("");
@@ -24,10 +24,16 @@ export default function Responder() {
   const [version, setVersion] = useState(0);
 
   useEffect(() => {
-    api.encuestaPublica(id)
-      .then(setEncuesta)
-      .catch(() => setError("responder.noDisponible"));
-  }, [id]);
+    // Si el idioma cambia rápido dos veces, se ignora la respuesta vieja que llegue tarde.
+    let vigente = true;
+    api
+      .encuestaPublica(id, idioma)
+      .then((datos) => vigente && setEncuesta(datos))
+      .catch(() => vigente && setError("responder.noDisponible"));
+    return () => {
+      vigente = false;
+    };
+  }, [id, idioma]);
 
   if (enviada)
     return (
@@ -40,12 +46,17 @@ export default function Responder() {
   if (!encuesta)
     return (
       <div className="angosto">
-        {error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>}
+        {error ? (
+          <p role="alert">{t(error)}</p>
+        ) : (
+          <p className="texto-suave">{t("cargando")}</p>
+        )}
       </div>
     );
 
   const preguntas = [...encuesta.preguntas].sort((a, b) => a.orden - b.orden);
-  const hayBorrador = borrador && Object.values(borrador).some((valor) => valor !== "");
+  const hayBorrador =
+    borrador && Object.values(borrador).some((valor) => valor !== "");
 
   // Se llama con cada cambio en cualquier campo del formulario (el evento "sube" desde el campo hasta el <form>).
   function guardarBorrador(e) {
@@ -65,7 +76,13 @@ export default function Responder() {
     setError("");
     try {
       // Cada control se llama como el id de su pregunta, así armamos lo que espera la API.
-      await api.responder(id, preguntas.map((p) => ({ preguntaId: p.id, valor: datos.get(String(p.id)) ?? "" })));
+      await api.responder(
+        id,
+        preguntas.map((p) => ({
+          preguntaId: p.id,
+          valor: datos.get(String(p.id)) ?? "",
+        })),
+      );
       localStorage.removeItem(claveBorrador);
       setEnviada(true);
     } catch (e) {
@@ -78,7 +95,9 @@ export default function Responder() {
       <div className="encabezado">
         <div>
           <h1>{encuesta.titulo}</h1>
-          {encuesta.descripcion && <p className="texto-suave">{encuesta.descripcion}</p>}
+          {encuesta.descripcion && (
+            <p className="texto-suave">{encuesta.descripcion}</p>
+          )}
         </div>
       </div>
 
@@ -96,7 +115,9 @@ export default function Responder() {
           <fieldset key={p.id} className="pregunta-publica">
             <legend>
               {p.texto}
-              {!p.obligatoria && <span className="opcional">{t("responder.opcional")}</span>}
+              {!p.obligatoria && (
+                <span className="opcional">{t("responder.opcional")}</span>
+              )}
             </legend>
             <Control pregunta={p} inicial={borrador?.[p.id]} />
           </fieldset>
@@ -105,6 +126,7 @@ export default function Responder() {
         {error && <p role="alert">{t(error)}</p>}
         <button type="submit">{t("responder.enviar")}</button>
         <p className="nota">{t("responder.autoguardado")}</p>
+        <p className="nota">{t("traduccion.automatica")}</p>
       </form>
     </div>
   );

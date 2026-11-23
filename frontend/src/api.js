@@ -46,11 +46,13 @@ export const api = {
       method: "DELETE",
     }),
 
-  encuestaPublica: (id) => pedir(`/publico/encuestas/${id}`),
+  encuestaPublica: (id, idioma) =>
+    pedir(`/publico/encuestas/${id}?idioma=${idioma}`),
   responder: (encuestaId, respuestas) =>
     pedir(`/publico/encuestas/${encuestaId}/respuestas`, {
       method: "POST",
       body: json({ respuestas }),
     }),
-  resultados: (encuestaId) => pedir(`/encuestas/${encuestaId}/resultados`),
+  resultados: (encuestaId, idioma) =>
+    pedir(`/encuestas/${encuestaId}/resultados?idioma=${idioma}`),
 };

@@ -6,15 +6,27 @@ import { useIdioma } from "../idioma.jsx";
 
 export default function Resultados() {
   const { id } = useParams();
-  const { t } = useIdioma();
+  const { t, idioma } = useIdioma();
   const [datos, setDatos] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    api.resultados(id).then(setDatos).catch((e) => setError(e.message));
-  }, [id]);
+    let vigente = true;
+    api
+      .resultados(id, idioma)
+      .then((d) => vigente && setDatos(d))
+      .catch((e) => vigente && setError(e.message));
+    return () => {
+      vigente = false;
+    };
+  }, [id, idioma]);
 
-  if (!datos) return error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>;
+  if (!datos)
+    return error ? (
+      <p role="alert">{t(error)}</p>
+    ) : (
+      <p className="texto-suave">{t("cargando")}</p>
+    );
 
   return (
     <div data-estilo={datos.estilo}>
@@ -61,7 +73,9 @@ function ResultadoPregunta({ tipo, resultado }) {
 
   if (tipo === "Escala1a5") {
     // La API manda la distribución como objeto { "1": 0, "2": 3, ... }; Recharts necesita una lista.
-    const barras = Object.entries(resultado.distribucion).map(([valor, cantidad]) => ({ valor, cantidad }));
+    const barras = Object.entries(resultado.distribucion).map(
+      ([valor, cantidad]) => ({ valor, cantidad }),
+    );
     return (
       <>
         <p className="resumen">
@@ -75,25 +89,37 @@ function ResultadoPregunta({ tipo, resultado }) {
 
   if (tipo === "SiNo") {
     const total = resultado.si + resultado.no;
-    const porcentajeSi = total === 0 ? 0 : Math.round((resultado.si / total) * 100);
+    const porcentajeSi =
+      total === 0 ? 0 : Math.round((resultado.si / total) * 100);
     return (
       <>
         <p className="resumen">
           <span className="metrica-valor">{porcentajeSi} %</span>
-          <span className="texto-suave">{t("resultados.respondieronSi", { si: resultado.si, total })}</span>
+          <span className="texto-suave">
+            {t("resultados.respondieronSi", { si: resultado.si, total })}
+          </span>
         </p>
-        <Barras datos={[{ valor: t("si"), cantidad: resultado.si }, { valor: t("no"), cantidad: resultado.no }]} />
+        <Barras
+          datos={[
+            { valor: t("si"), cantidad: resultado.si },
+            { valor: t("no"), cantidad: resultado.no },
+          ]}
+        />
       </>
     );
   }
 
-  if (resultado.comentarios.length === 0) return <p className="texto-suave">{t("resultados.sinComentarios")}</p>;
+  if (resultado.comentarios.length === 0)
+    return <p className="texto-suave">{t("resultados.sinComentarios")}</p>;
   return (
-    <ul className="comentarios">
-      {resultado.comentarios.map((c, i) => (
-        <li key={i}>{c}</li>
-      ))}
-    </ul>
+    <>
+      <ul className="comentarios">
+        {resultado.comentarios.map((c, i) => (
+          <li key={i}>{c}</li>
+        ))}
+      </ul>
+      <p className="nota">{t("traduccion.automatica")}</p>
+    </>
   );
 }
 
