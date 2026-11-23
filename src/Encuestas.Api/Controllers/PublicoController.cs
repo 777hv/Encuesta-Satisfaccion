@@ -6,14 +6,18 @@ namespace Encuestas.Api.Controllers;
 // Endpoints que usa quien responde la encuesta (sin iniciar sesión).
 [ApiController]
 [Route("api/publico/encuestas/{encuestaId:int}")]
-public class PublicoController(RespuestaService service) : ControllerBase
+public class PublicoController(RespuestaService service, TraduccionService traduccion) : ControllerBase
 {
 
     [HttpGet]
-    public async Task<IActionResult> Obtener(int encuestaId)
+    public async Task<IActionResult> Obtener(int encuestaId, [FromQuery] string? idioma)
     {
         var encuesta = await service.ObtenerParaResponderAsync(encuestaId);
-        return encuesta is null ? NotFound() : Ok(encuesta);
+        if (encuesta is null)
+            return NotFound();
+
+        await traduccion.TraducirEncuestaAsync(encuesta, idioma);
+        return Ok(encuesta);
     }
 
     [HttpPost("respuestas")]
