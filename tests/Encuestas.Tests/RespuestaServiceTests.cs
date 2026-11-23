@@ -97,4 +97,38 @@ public class RespuestaServiceTests
         Assert.Null(await service.ObtenerParaResponderAsync(1));
     }
 
+    [Fact]
+    public async Task Responder_OpcionalSinResponder_GuardaSoloLasRespondidas()
+    {
+        encuestas.Datos[0].Preguntas[1].Obligatoria = false;
+
+        var respuesta = await service.ResponderAsync(1, new ResponderEncuestaDto(
+            [new RespuestaPreguntaDto(10, "4"), new RespuestaPreguntaDto(11, "")]));
+
+        Assert.NotNull(respuesta);
+        Assert.Single(respuestas.Datos.Single().Detalles);
+    }
+
+    [Fact]
+    public async Task Responder_ObligatoriaVacia_LanzaError()
+    {
+        await Assert.ThrowsAsync<ValidacionException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
+            [new RespuestaPreguntaDto(10, "  "), new RespuestaPreguntaDto(11, "Si")])));
+    }
+
+    [Fact]
+    public async Task Responder_PreguntaRepetida_LanzaError()
+    {
+        await Assert.ThrowsAsync<ValidacionException>(() => service.ResponderAsync(1, new ResponderEncuestaDto(
+            [new RespuestaPreguntaDto(10, "4"), new RespuestaPreguntaDto(10, "5"), new RespuestaPreguntaDto(11, "Si")])));
+    }
+
+    [Fact]
+    public async Task Responder_TodoVacioConPreguntasOpcionales_LanzaError()
+    {
+        encuestas.Datos[0].Preguntas.ForEach(p => p.Obligatoria = false);
+
+        await Assert.ThrowsAsync<ValidacionException>(() => service.ResponderAsync(1, new ResponderEncuestaDto([])));
+    }
+
 }

@@ -200,6 +200,7 @@ export default function EditarEncuesta() {
             texto: "",
             tipo: "Escala1a5",
             orden: preguntas.length + 1,
+            obligatoria: true,
           }}
           textoBoton={t("editar.agregar")}
           onGuardar={(datos) =>

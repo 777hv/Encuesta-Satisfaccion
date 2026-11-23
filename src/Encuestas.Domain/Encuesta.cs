@@ -22,6 +22,7 @@ public class Pregunta
     public string Texto { get; set; } = "";
     public TipoPregunta Tipo { get; set; }
     public int Orden { get; set; }
+    public bool Obligatoria { get; set; } = true;
 }
 
 public enum TipoPregunta

@@ -11,7 +11,8 @@ export default function Responder() {
   const [enviada, setEnviada] = useState(false);
 
   useEffect(() => {
-    api.encuestaPublica(id)
+    api
+      .encuestaPublica(id)
       .then(setEncuesta)
       .catch(() => setError("responder.noDisponible"));
   }, [id]);
@@ -70,7 +71,12 @@ export default function Responder() {
       <form onSubmit={enviar}>
         {preguntas.map((p) => (
           <fieldset key={p.id} className="pregunta-publica">
-            <legend>{p.texto}</legend>
+            <legend>
+              {p.texto}
+              {!p.obligatoria && (
+                <span className="opcional">{t("responder.opcional")}</span>
+              )}
+            </legend>
             <Control pregunta={p} />
           </fieldset>
         ))}
@@ -86,15 +92,34 @@ export default function Responder() {
 function Control({ pregunta }) {
   const { t } = useIdioma();
   const nombre = String(pregunta.id);
+  const requerida = pregunta.obligatoria;
 
-  if (pregunta.tipo === "TextoLibre") return <textarea name={nombre} required maxLength={2000} rows={4} />;
+  if (pregunta.tipo === "TextoLibre")
+    return (
+      <textarea name={nombre} required={requerida} maxLength={2000} rows={4} />
+    );
 
   // El valor que se envía no cambia ("Si"/"No"); solo se traduce lo que se muestra.
-  if (pregunta.tipo === "SiNo") return <Opciones nombre={nombre} opciones={[["Si", t("si")], ["No", t("no")]]} />;
+  if (pregunta.tipo === "SiNo")
+    return (
+      <Opciones
+        nombre={nombre}
+        requerida={requerida}
+        opciones={[
+          ["Si", t("si")],
+          ["No", t("no")],
+        ]}
+      />
+    );
 
   return (
     <>
-      <Opciones nombre={nombre} escala opciones={["1", "2", "3", "4", "5"].map((n) => [n, n])} />
+      <Opciones
+        nombre={nombre}
+        requerida={requerida}
+        escala
+        opciones={["1", "2", "3", "4", "5"].map((n) => [n, n])}
+      />
       <div className="escala-extremos">
         <span>{t("responder.escalaMin")}</span>
         <span>{t("responder.escalaMax")}</span>
@@ -104,12 +129,17 @@ function Control({ pregunta }) {
 }
 
 // Radios nativos (accesibles y con "required") mostrados como botones grandes.
-function Opciones({ nombre, opciones, escala }) {
+function Opciones({ nombre, opciones, escala, requerida }) {
   return (
     <div className={escala ? "opciones escala" : "opciones"}>
       {opciones.map(([valor, texto]) => (
         <label key={valor} className="opcion">
-          <input type="radio" name={nombre} value={valor} required />
+          <input
+            type="radio"
+            name={nombre}
+            value={valor}
+            required={requerida}
+          />
           <span>{texto}</span>
         </label>
       ))}

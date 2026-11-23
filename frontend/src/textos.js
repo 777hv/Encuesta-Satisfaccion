@@ -76,6 +76,8 @@ export const textos = {
     "pregunta.orden": "Orden",
     "pregunta.texto": "Texto de la pregunta",
     "pregunta.tipo": "Tipo",
+    "pregunta.obligatoria": "Obligatoria",
+    "responder.opcional": "Opcional",
 
     "responder.noDisponible":
       "Esta encuesta no existe o ya no acepta respuestas.",
@@ -174,6 +176,8 @@ export const textos = {
     "pregunta.orden": "Order",
     "pregunta.texto": "Question text",
     "pregunta.tipo": "Type",
+    "pregunta.obligatoria": "Required",
+    "responder.opcional": "Optional",
 
     "responder.noDisponible":
       "This survey doesn't exist or is no longer accepting responses.",

@@ -71,6 +71,9 @@ namespace Encuestas.Infrastructure.Migrations
                     b.Property<int>("EncuestaId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Obligatoria")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Orden")
                         .HasColumnType("int");
 

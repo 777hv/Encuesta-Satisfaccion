@@ -14,7 +14,7 @@ public record ActualizarEncuestaDto(
     bool Activa,
     Tematica Tematica = Tematica.General,
     EstiloEncuesta Estilo = EstiloEncuesta.Petroleo);
-public record PreguntaDto(string Texto, TipoPregunta Tipo, int Orden);
+public record PreguntaDto(string Texto, TipoPregunta Tipo, int Orden, bool Obligatoria = true);
 public class EncuestaService(IEncuestaRepository repo)
 {
     public Task<List<Encuesta>> ListarAsync() => repo.ListarAsync();
@@ -75,7 +75,8 @@ public class EncuestaService(IEncuestaRepository repo)
             EncuestaId = encuestaId,
             Texto = dto.Texto.Trim(),
             Tipo = dto.Tipo,
-            Orden = dto.Orden
+            Orden = dto.Orden,
+            Obligatoria = dto.Obligatoria
         });
     }
 
@@ -90,7 +91,7 @@ public class EncuestaService(IEncuestaRepository repo)
         pregunta.Texto = dto.Texto.Trim();
         pregunta.Tipo = dto.Tipo;
         pregunta.Orden = dto.Orden;
-
+        pregunta.Obligatoria = dto.Obligatoria;
         await repo.ActualizarPreguntaAsync(pregunta);
         return true;
     }
