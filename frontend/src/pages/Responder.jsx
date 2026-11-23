@@ -27,7 +27,11 @@ export default function Responder() {
   if (!encuesta)
     return (
       <div className="angosto">
-        {error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>}
+        {error ? (
+          <p role="alert">{t(error)}</p>
+        ) : (
+          <p className="texto-suave">{t("cargando")}</p>
+        )}
       </div>
     );
 
@@ -39,7 +43,13 @@ export default function Responder() {
     setError("");
     try {
       // Cada control se llama como el id de su pregunta, así armamos lo que espera la API.
-      await api.responder(id, preguntas.map((p) => ({ preguntaId: p.id, valor: datos.get(String(p.id)) ?? "" })));
+      await api.responder(
+        id,
+        preguntas.map((p) => ({
+          preguntaId: p.id,
+          valor: datos.get(String(p.id)) ?? "",
+        })),
+      );
       setEnviada(true);
     } catch (e) {
       setError(e.message);
@@ -47,11 +57,13 @@ export default function Responder() {
   }
 
   return (
-    <div className="angosto">
+    <div className="angosto" data-estilo={encuesta.estilo}>
       <div className="encabezado">
         <div>
           <h1>{encuesta.titulo}</h1>
-          {encuesta.descripcion && <p className="texto-suave">{encuesta.descripcion}</p>}
+          {encuesta.descripcion && (
+            <p className="texto-suave">{encuesta.descripcion}</p>
+          )}
         </div>
       </div>
 

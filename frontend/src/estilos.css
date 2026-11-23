@@ -480,6 +480,78 @@ p[role="status"] {
   border-bottom: 0;
 }
 
+/* Estilos por encuesta: dentro de un elemento con data-estilo cambian el color principal y el de las gráficas.
+   Petróleo no necesita regla: usa los valores por defecto. */
+[data-estilo="Coral"] { --primario: #b8452f; --primario-hover: #9e3a27; --grafica: #c4553e; }
+[data-estilo="Lavanda"] { --primario: #5b4b9a; --primario-hover: #4c3e85; --grafica: #6a5aa8; }
+[data-estilo="Bosque"] { --primario: #2f6b3a; --primario-hover: #265a30; --grafica: #3a7d46; }
+[data-estilo="Ambar"] { --primario: #8a5a00; --primario-hover: #744b00; --grafica: #b07a12; }
+[data-estilo="Grafito"] { --primario: #3d4650; --primario-hover: #2f363e; --grafica: #56606b; }
+
+:root[data-tema="oscuro"] [data-estilo="Coral"] { --primario: #f2a08c; --primario-hover: #f6b6a6; --grafica: #e98b74; }
+:root[data-tema="oscuro"] [data-estilo="Lavanda"] { --primario: #b9adf0; --primario-hover: #cbc2f5; --grafica: #a497e6; }
+:root[data-tema="oscuro"] [data-estilo="Bosque"] { --primario: #92d1a0; --primario-hover: #a9ddb4; --grafica: #7cc28c; }
+:root[data-tema="oscuro"] [data-estilo="Ambar"] { --primario: #f0c060; --primario-hover: #f5cf85; --grafica: #e0ae4a; }
+:root[data-tema="oscuro"] [data-estilo="Grafito"] { --primario: #c9d1d8; --primario-hover: #dae0e5; --grafica: #aab4bd; }
+
+/* Muestra de color: un círculo con el --primario del estilo que lo rodea */
+.muestra-color {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--primario);
+  vertical-align: middle;
+}
+.estilos {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+.estilos legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.muestras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+.muestra {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+.muestra input {
+  width: 1rem;
+  height: 1rem;
+  min-height: 0;
+  margin: 0;
+  accent-color: var(--primario);
+}
+.muestra .muestra-color {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0;
+}
+
+/* Barra de herramientas sobre la tabla (filtro) */
+.herramientas {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+
 /* Celular */
 @media (max-width: 640px) {
   .contenedor {

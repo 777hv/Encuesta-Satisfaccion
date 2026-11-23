@@ -17,19 +17,23 @@ export default function Resultados() {
   if (!datos) return error ? <p role="alert">{t(error)}</p> : <p className="texto-suave">{t("cargando")}</p>;
 
   return (
-    <>
+    <div data-estilo={datos.estilo}>
       <div className="encabezado">
         <div>
           <h1>{datos.titulo}</h1>
           <p className="texto-suave">{t("resultados.subtitulo")}</p>
         </div>
-        <Link className="boton secundario" to={`/encuestas/${id}`}>{t("resultados.editar")}</Link>
+        <Link className="boton secundario" to={`/encuestas/${id}`}>
+          {t("resultados.editar")}
+        </Link>
       </div>
 
       <div className="metricas">
         <div>
           <div className="metrica-valor">{datos.totalRespuestas}</div>
-          <div className="metrica-etiqueta">{t("resultados.respuestasTotales")}</div>
+          <div className="metrica-etiqueta">
+            {t("resultados.respuestasTotales")}
+          </div>
         </div>
         <div>
           <div className="metrica-valor">{datos.preguntas.length}</div>
@@ -47,7 +51,7 @@ export default function Resultados() {
           </section>
         ))
       )}
-    </>
+    </div>
   );
 }
 

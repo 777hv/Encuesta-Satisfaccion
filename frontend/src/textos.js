@@ -15,6 +15,24 @@ export const textos = {
     "tipo.Escala1a5": "Escala 1 a 5",
     "tipo.SiNo": "Sí / No",
     "tipo.TextoLibre": "Texto libre",
+    "tematica.General": "General",
+    "tematica.AtencionCliente": "Atención al cliente",
+    "tematica.Producto": "Producto",
+    "tematica.Evento": "Evento",
+    "tematica.Empleados": "Empleados",
+    "tematica.Educacion": "Educación",
+    "estilo.Petroleo": "Petróleo",
+    "estilo.Coral": "Coral",
+    "estilo.Lavanda": "Lavanda",
+    "estilo.Bosque": "Bosque",
+    "estilo.Ambar": "Ámbar",
+    "estilo.Grafito": "Grafito",
+    "lista.colTematica": "Temática",
+    "lista.filtrar": "Filtrar por temática",
+    "lista.todas": "Todas",
+    "lista.sinCoincidencias": "No hay encuestas con esta temática.",
+    "editar.tematica": "Temática",
+    "editar.estilo": "Estilo de color",
 
     "lista.titulo": "Tus encuestas",
     "lista.subtitulo": "Crea encuestas, compártelas y revisa sus resultados.",
@@ -30,7 +48,8 @@ export const textos = {
     "lista.inactiva": "Inactiva",
     "lista.resultados": "Resultados",
     "lista.eliminar": "Eliminar",
-    "lista.confirmarEliminar": "¿Eliminar \"{titulo}\" con todas sus preguntas y respuestas?",
+    "lista.confirmarEliminar":
+      '¿Eliminar "{titulo}" con todas sus preguntas y respuestas?',
 
     "editar.titulo": "Editar encuesta",
     "editar.verResultados": "Ver resultados",
@@ -58,10 +77,12 @@ export const textos = {
     "pregunta.texto": "Texto de la pregunta",
     "pregunta.tipo": "Tipo",
 
-    "responder.noDisponible": "Esta encuesta no existe o ya no acepta respuestas.",
+    "responder.noDisponible":
+      "Esta encuesta no existe o ya no acepta respuestas.",
     "responder.enviar": "Enviar respuestas",
     "responder.gracias": "¡Gracias por responder!",
-    "responder.graciasDetalle": "Tus respuestas se guardaron. Ya puedes cerrar esta página.",
+    "responder.graciasDetalle":
+      "Tus respuestas se guardaron. Ya puedes cerrar esta página.",
     "responder.escalaMin": "Nada satisfecho",
     "responder.escalaMax": "Muy satisfecho",
 
@@ -69,7 +90,8 @@ export const textos = {
     "resultados.editar": "Editar encuesta",
     "resultados.respuestasTotales": "Respuestas recibidas",
     "resultados.preguntas": "Preguntas",
-    "resultados.sinRespuestas": "Todavía no hay respuestas. Comparte el enlace público para empezar a recibirlas.",
+    "resultados.sinRespuestas":
+      "Todavía no hay respuestas. Comparte el enlace público para empezar a recibirlas.",
     "resultados.promedioDe5": "promedio de 5",
     "resultados.respondieronSi": "respondió Sí ({si} de {total})",
     "resultados.sinComentarios": "Sin comentarios.",
@@ -90,12 +112,31 @@ export const textos = {
     "tipo.Escala1a5": "Scale 1 to 5",
     "tipo.SiNo": "Yes / No",
     "tipo.TextoLibre": "Free text",
+    "tematica.General": "General",
+    "tematica.AtencionCliente": "Customer service",
+    "tematica.Producto": "Product",
+    "tematica.Evento": "Event",
+    "tematica.Empleados": "Employees",
+    "tematica.Educacion": "Education",
+    "estilo.Petroleo": "Petrol",
+    "estilo.Coral": "Coral",
+    "estilo.Lavanda": "Lavender",
+    "estilo.Bosque": "Forest",
+    "estilo.Ambar": "Amber",
+    "estilo.Grafito": "Graphite",
+    "lista.colTematica": "Topic",
+    "lista.filtrar": "Filter by topic",
+    "lista.todas": "All",
+    "lista.sinCoincidencias": "No surveys with this topic.",
+    "editar.tematica": "Topic",
+    "editar.estilo": "Color style",
 
     "lista.titulo": "Your surveys",
     "lista.subtitulo": "Create surveys, share them and review their results.",
     "lista.nuevoTitulo": "New survey title",
     "lista.crear": "Create survey",
-    "lista.vacia": "You don't have any surveys yet. Create the first one above.",
+    "lista.vacia":
+      "You don't have any surveys yet. Create the first one above.",
     "lista.colTitulo": "Title",
     "lista.colEstado": "Status",
     "lista.colPreguntas": "Questions",
@@ -105,7 +146,8 @@ export const textos = {
     "lista.inactiva": "Inactive",
     "lista.resultados": "Results",
     "lista.eliminar": "Delete",
-    "lista.confirmarEliminar": "Delete \"{titulo}\" with all its questions and answers?",
+    "lista.confirmarEliminar":
+      'Delete "{titulo}" with all its questions and answers?',
 
     "editar.titulo": "Edit survey",
     "editar.verResultados": "View results",
@@ -133,10 +175,12 @@ export const textos = {
     "pregunta.texto": "Question text",
     "pregunta.tipo": "Type",
 
-    "responder.noDisponible": "This survey doesn't exist or is no longer accepting responses.",
+    "responder.noDisponible":
+      "This survey doesn't exist or is no longer accepting responses.",
     "responder.enviar": "Submit answers",
     "responder.gracias": "Thanks for your answers!",
-    "responder.graciasDetalle": "Your answers were saved. You can close this page now.",
+    "responder.graciasDetalle":
+      "Your answers were saved. You can close this page now.",
     "responder.escalaMin": "Not satisfied",
     "responder.escalaMax": "Very satisfied",
 
@@ -144,7 +188,8 @@ export const textos = {
     "resultados.editar": "Edit survey",
     "resultados.respuestasTotales": "Responses received",
     "resultados.preguntas": "Questions",
-    "resultados.sinRespuestas": "No responses yet. Share the public link to start collecting them.",
+    "resultados.sinRespuestas":
+      "No responses yet. Share the public link to start collecting them.",
     "resultados.promedioDe5": "average out of 5",
     "resultados.respondieronSi": "answered Yes ({si} of {total})",
     "resultados.sinComentarios": "No comments.",

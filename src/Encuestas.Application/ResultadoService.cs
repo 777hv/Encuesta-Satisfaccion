@@ -1,7 +1,9 @@
+using Encuestas.Domain;
+
 namespace Encuestas.Application;
 
 public record ResultadoPregunta(int PreguntaId, string Texto, string Tipo, object Resultado);
-public record ResultadoEncuesta(int EncuestaId, string Titulo, int TotalRespuestas, List<ResultadoPregunta> Preguntas);
+public record ResultadoEncuesta(int EncuestaId, string Titulo, int TotalRespuestas, List<ResultadoPregunta> Preguntas, EstiloEncuesta Estilo);
 
 public class ResultadoService(
     IEncuestaRepository encuestas,
@@ -28,6 +30,6 @@ public class ResultadoService(
                 calculadoraPorTipo[p.Tipo].Calcular(valoresPorPregunta[p.Id].ToList())))
             .ToList();
 
-        return new ResultadoEncuesta(encuesta.Id, encuesta.Titulo, total, preguntas);
+        return new ResultadoEncuesta(encuesta.Id, encuesta.Titulo, total, preguntas, encuesta.Estilo);
     }
 }
