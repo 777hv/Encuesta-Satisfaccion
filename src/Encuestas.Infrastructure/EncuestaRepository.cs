@@ -7,7 +7,7 @@ namespace Encuestas.Infrastructure;
 public class EncuestaRepository(EncuestasDbContext db) : IEncuestaRepository
 {
     public Task<List<Encuesta>> ListarAsync() =>
-        db.Encuestas.AsNoTracking().OrderByDescending(e => e.FechaCreacion).ToListAsync();
+        db.Encuestas.AsNoTracking().Include(e => e.Preguntas).OrderByDescending(e => e.FechaCreacion).ToListAsync();
 
     public Task<Encuesta?> ObtenerAsync(int id) =>
         db.Encuestas.AsNoTracking().Include(e => e.Preguntas).FirstOrDefaultAsync(e => e.Id == id);
