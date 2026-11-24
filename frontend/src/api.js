@@ -1,4 +1,7 @@
-const API = import.meta.env.VITE_API_URL ?? "http://localhost:5080";
+// En desarrollo la API corre aparte (puerto 5080); en producción va en el mismo dominio.
+const API =
+  import.meta.env.VITE_API_URL ??
+  (import.meta.env.DEV ? "http://localhost:5080" : "");
 
 // Hace la petición y convierte los errores de la API (ProblemDetails) en un Error con mensaje legible.
 async function pedir(ruta, opciones = {}) {
@@ -8,13 +11,18 @@ async function pedir(ruta, opciones = {}) {
       ...opciones,
       headers: { "Content-Type": "application/json" },
     });
-    } catch {
+  } catch {
     throw new Error("error.conexion");
   }
 
   if (!r.ok) {
     const problema = await r.json().catch(() => null);
-    throw new Error(problema?.detail ?? (r.status === 404 ? "error.noEncontrado" : problema?.title ?? "error.servidor"));
+    throw new Error(
+      problema?.detail ??
+        (r.status === 404
+          ? "error.noEncontrado"
+          : (problema?.title ?? "error.servidor")),
+    );
   }
 
   return r.status === 204 ? null : r.json();

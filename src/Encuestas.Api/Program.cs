@@ -48,5 +48,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 
 app.UseCors();
+app.UseStaticFiles();
 app.MapControllers();
+// Cualquier ruta que no sea de la API (/encuestas/5, /responder/3…) la resuelve React.
+app.MapFallbackToFile("index.html");
 app.Run();
